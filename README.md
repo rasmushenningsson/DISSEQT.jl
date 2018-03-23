@@ -2,4 +2,5 @@
 DISSEQT – DIStribution based modeling of SEQuence Space Time dynamics
 
 
-Source code will soon be available. In the meantime, please contact rasmus@maths.lth.se if you need access.
+The current version of DISSEQT has some dependencies that are not yet public.
+If you need to use DISSEQT before these are made available, please contact rasmus@maths.lth.se if you need access.
