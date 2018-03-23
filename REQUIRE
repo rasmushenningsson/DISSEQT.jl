@@ -2,5 +2,5 @@ julia 0.6
 JLD
 StatsBase
 DataStructures
-DataFrames
+DataFrames 0.4.2 0.11.0
 Bio
