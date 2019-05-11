@@ -28,7 +28,7 @@ function _interpolate(tStart, tEnd, A, B, t)
 end
 
 
-function timeseriesat{T,S}(keyTimes::AbstractVector{T},V::AbstractMatrix{S},t::Number; clamp=false)
+function timeseriesat(keyTimes::AbstractVector{T},V::AbstractMatrix{S},t::Number; clamp=false) where {T,S}
     @assert all(diff(keyTimes).>0)
     if clamp
         t = Base.clamp(t,keyTimes[1],keyTimes[end])
@@ -42,10 +42,10 @@ function timeseriesat{T,S}(keyTimes::AbstractVector{T},V::AbstractMatrix{S},t::N
     _interpolate(keyTimes[ind],keyTimes[ind+1], V[:,ind], V[:,ind+1], t)
 end
 
-timeseriesat{T<:Number}(keyTimes::AbstractVector,V::AbstractMatrix,t::AbstractVector{T}; clamp=false) =
+timeseriesat(keyTimes::AbstractVector,V::AbstractMatrix,t::AbstractVector{T}; clamp=false) where {T<:Number} =
     hcat( [timeseriesat(keyTimes,V,s;clamp=clamp) for s in t]... )
 
-timeseriesat{T<:AbstractVector,S<:AbstractMatrix}(keyTimes::AbstractVector{T},V::AbstractVector{S},i,t; kwargs...) =
+timeseriesat(keyTimes::AbstractVector{T},V::AbstractVector{S},i,t; kwargs...) where {T<:AbstractVector,S<:AbstractMatrix} =
     timeseriesat(keyTimes[i],V[i],t; kwargs...)
 
 
@@ -56,14 +56,14 @@ function timeseriesmean(keyTimes::AbstractVector,V::AbstractMatrix)
     w = w/sum(w)
     sum(V.*w', 2)
 end
-timeseriesmean{T<:AbstractVector,S<:AbstractMatrix}(keyTimes::AbstractVector{T},V::AbstractVector{S}) = map(timeseriesmean,keyTimes,V)
+timeseriesmean(keyTimes::AbstractVector{T},V::AbstractVector{S}) where {T<:AbstractVector,S<:AbstractMatrix} = map(timeseriesmean,keyTimes,V)
 
 
 
 # outputs d(V1,V2)(t), the distance of the multivariate time series V1 and V2 (DxT1, DxT2 matrices) as a function of time 
 # output given as a piecewise 2nd degree polynomial, 1st row is constant factor, 2nd row is linear factor, 3rd row is square factor (the polynomial describes squared distance)
 # each piece is paramterized for the interval [0, tEnd-tStart]
-function distancecurve{T,S}(t1::AbstractVector{T},t2::AbstractVector{T},V1::AbstractMatrix{S},V2::AbstractMatrix{S})
+function distancecurve(t1::AbstractVector{T},t2::AbstractVector{T},V1::AbstractMatrix{S},V2::AbstractMatrix{S}) where {T,S}
     #@assert issorted(t1) && issorted(t2)
     @assert all(diff(t1).>0) && all(diff(t2).>0) # check that the values are strictyly increasing
 
@@ -122,7 +122,7 @@ distancecurve(t1::AbstractVector,t2::AbstractVector,V1::AbstractMatrix,V2::Abstr
 
 
 # find all values of t for which f(t)==y, where f(t) is the square root of a positive piecewise 2nd-degree polynomial
-function distancecurveequals{T}(t::AbstractVector{T}, P::AbstractVecOrMat, y)
+function distancecurveequals(t::AbstractVector{T}, P::AbstractVecOrMat, y) where {T}
     @assert y>=0
     y = y^2
 
@@ -132,7 +132,7 @@ function distancecurveequals{T}(t::AbstractVector{T}, P::AbstractVecOrMat, y)
 
     for i=1:length(t)-1
         # solve in this segment
-        c,b,a = (P[:,i]...)
+        c,b,a = (P[:,i]...,)
         c -= y
 
         if abs(a)<1e-16
@@ -166,7 +166,7 @@ function distancecurveequals{T}(t::AbstractVector{T}, P::AbstractVecOrMat, y)
 end
 
 # first time the distance reaches a given threshold
-function bifurcationtime{T}(t::AbstractVector{T}, P::AbstractVecOrMat, y)
+function bifurcationtime(t::AbstractVector{T}, P::AbstractVecOrMat, y) where {T}
     RT = promote_type(Float64,T)
     y^2<=P[1,1] && return convert(RT,t[1])
     tEq = distancecurveequals(t,P,y)
@@ -175,7 +175,7 @@ end
 
 
 
-function evaluatedistancecurve{T}(t::AbstractVector, P::AbstractVecOrMat, x::AbstractVector{T})
+function evaluatedistancecurve(t::AbstractVector, P::AbstractVecOrMat, x::AbstractVector{T}) where {T}
     @assert issorted(t)
     @assert issorted(x)
     @assert size(P,2)==length(t)-1
@@ -204,7 +204,7 @@ function evaluatedistancecurve{T}(t::AbstractVector, P::AbstractVecOrMat, x::Abs
 end
 
 
-function distancecurvemean{T}(t::AbstractVector, P::AbstractVecOrMat{T})
+function distancecurvemean(t::AbstractVector, P::AbstractVecOrMat{T}) where {T}
     # integrate distance
 
     integral = zero(T)
@@ -216,7 +216,7 @@ function distancecurvemean{T}(t::AbstractVector, P::AbstractVecOrMat{T})
         # the 2nd degree polynomial for the segment is by construction nonnegative for all t (not only in the current segment)
         # use formula ∫√(x²+u²)dx = 1/2 x√(x²+u²) + 1/2u²ln(x + √(x²+u²))
 
-        c,b,a = (P[:,i]...)
+        c,b,a = (P[:,i]...,)
 
         if abs(a)<1e-16
             # linear case

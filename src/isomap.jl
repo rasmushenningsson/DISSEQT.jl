@@ -12,7 +12,7 @@ end
 
 # makes matrix connected
 # assumes D and DFull are symmetric
-function makeconnected!{T<:Real}(D::AbstractMatrix{T},DFull::AbstractMatrix{T})
+function makeconnected!(D::AbstractMatrix{T},DFull::AbstractMatrix{T}) where {T<:Real}
     N = size(D,1)
 
     # find all connected components
@@ -71,7 +71,7 @@ end
 
 
 # Creates distance matrix based on Isomap distances
-function isomapmatrix{T<:Real}(D::AbstractMatrix{T}, nearestNeighbours::Integer, distanceThreshold::Real)
+function isomapmatrix(D::AbstractMatrix{T}, nearestNeighbours::Integer, distanceThreshold::Real) where {T<:Real}
     @assert ndims(D)==2
     @assert size(D,1)==size(D,2)
     @assert nearestNeighbours>0
@@ -114,12 +114,12 @@ end
 
 
 
-function isomap{T<:Real}(D::AbstractMatrix{T}, p::Integer, nearestNeighbours::Integer, distanceThreshold::Real)
+function isomap(D::AbstractMatrix{T}, p::Integer, nearestNeighbours::Integer, distanceThreshold::Real) where {T<:Real}
     I = isomapmatrix(D, nearestNeighbours, distanceThreshold)
     mds(I,p)
 end
 
-function kruskalisomap{T<:Real}(D::AbstractMatrix{T}, p::Integer, nearestNeighbours::Integer, distanceThreshold::Real; kwargs...)
+function kruskalisomap(D::AbstractMatrix{T}, p::Integer, nearestNeighbours::Integer, distanceThreshold::Real; kwargs...) where {T<:Real}
     I = isomapmatrix(D, nearestNeighbours, distanceThreshold)
     X0 = mds(I,p)
     kruskalmds(I, p, X0; kwargs...)

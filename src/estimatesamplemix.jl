@@ -63,7 +63,7 @@ end
 
 
 # TODO: support referenceGenomes::Array{Reference} too
-function estimatemix{T<:AbstractString}(swarms::AnnotatedArray, referenceGenomes::Vector{T})
+function estimatemix(swarms::AnnotatedArray, referenceGenomes::Vector{T}) where {T<:AbstractString}
     @assert all( map(length,referenceGenomes) .== length(referenceGenomes[1]) )
     
     nbrReferences = length(referenceGenomes)

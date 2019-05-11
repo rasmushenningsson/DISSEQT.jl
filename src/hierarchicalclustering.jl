@@ -20,7 +20,7 @@ end
 
 
 # only upper triangular part of D is used 
-function hierarchicalclustering{T}(D::AbstractMatrix{T}; similarity=false)
+function hierarchicalclustering(D::AbstractMatrix{T}; similarity=false) where {T}
     @assert size(D,1)==size(D,2)
     N = size(D,1)
 

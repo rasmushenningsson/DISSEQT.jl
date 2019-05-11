@@ -9,13 +9,13 @@ codonindex() = (0,0,0)::CodonIndex
 
 
 valid(ci::CodonIndex) = ci[1]>0 && ci[2]>0 && ci[3]>0
-shiftin{T}(t::Tuple{T,T,T},s::T) = (t[2],t[3],s)
+shiftin(t::Tuple{T,T,T},s::T) where {T} = (t[2],t[3],s)
 
 function codon(ci::CodonIndex)
-	const n = ['A','C','G','T']
-	string(ci[1]>0?n[ci[1]]:'x',
-		   ci[2]>0?n[ci[2]]:'x',
-		   ci[3]>0?n[ci[3]]:'x')
+	n = ['A','C','G','T']
+	string(ci[1]>0 ? n[ci[1]] : 'x',
+		   ci[2]>0 ? n[ci[2]] : 'x',
+		   ci[3]>0 ? n[ci[3]] : 'x')
 end
 
 
@@ -106,7 +106,7 @@ end
 # end
 
 # handles 4x4x4 matrix for a given position in the reference
-function removeambiguous!{T}(a::AbstractArray{T,3},scratch::Array{CodonQualityTriplet,1}=Array{CodonQualityTriplet,1}())
+function removeambiguous!(a::AbstractArray{T,3},scratch::Array{CodonQualityTriplet,1}=Array{CodonQualityTriplet,1}()) where {T}
 	complete = map(hascompletecodon,a)
 
 	for c1=1:4

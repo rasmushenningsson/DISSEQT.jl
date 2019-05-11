@@ -38,7 +38,7 @@ function setupproblem(observations::AbstractArray{NucQualityDict,1})
 	end
 
 	s = sum(nucCounts)
-	theta0 = nucCounts/(s>0?s:1.0)
+	theta0 = nucCounts/(s>0 ? s : 1)
 
 	theta0,rcn,counts
 end

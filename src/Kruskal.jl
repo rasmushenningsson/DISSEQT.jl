@@ -36,7 +36,7 @@ export kruskalmds
 
 
 
-type SData{T}
+mutable struct SData{T}
     lastX::Vector{T} # Vectorization of pxN data point matrix. Needed to figure out whether we moved or not since last call to _update
     p::Int # Number of dimensions in low-dimensional representation.
     N::Int # Number of data points
@@ -47,10 +47,10 @@ type SData{T}
     numGrad::Vector{T} # gradient of numerator
     denGrad::Vector{T} # gradient of denominator
 end
-SData{T}(p,N,targetD::Vector{T}) = SData(NaN*zeros(T,p*N),p,N,targetD,zero(T),zero(T),zero(T),Vector{T}(p*N),Vector{T}(p*N))
+SData(p,N,targetD::Vector{T}) where {T} = SData(NaN*zeros(T,p*N),p,N,targetD,zero(T),zero(T),zero(T),Vector{T}(p*N),Vector{T}(p*N))
 
 
-function update!{T}(sData::SData{T},X)
+function update!(sData::SData{T},X) where {T}
     sData.lastX == X && return # nothing to do
 
     targetD = sData.targetD
@@ -129,7 +129,7 @@ end
 
 
 
-function updatelocation{T}(D::AbstractVector{T}, X0::AbstractMatrix{T}, tol)
+function updatelocation(D::AbstractVector{T}, X0::AbstractMatrix{T}, tol) where {T}
     p = size(X0,1)
     N = size(X0,2)
     X0 = X0[:]
@@ -190,11 +190,11 @@ function distancematrix!(D::AbstractMatrix, dist::AbstractVector)
     end
     D
 end
-distancematrix{T}(dist::AbstractVector{T}) = (M=length(dist); N=round(Int,1/2+sqrt(1/4+2M)); distancematrix!(Matrix{T}(N,N),dist))
+distancematrix(dist::AbstractVector{T}) where {T} = (M=length(dist); N=round(Int,1/2+sqrt(1/4+2M)); distancematrix!(Matrix{T}(N,N),dist))
 
 
 
-function isotonicregression{T}(Y::AbstractVector{T}, tieGroups::Vector{UnitRange}=[])
+function isotonicregression(Y::AbstractVector{T}, tieGroups::Vector{UnitRange}=[]) where {T}
     X = Vector{Tuple{T,Int}}() # tuple with values and integer weight
 
     # reorder values in each tieGroup to put them in increasing order
@@ -266,7 +266,7 @@ function duplicateranges(v)
 end
 
 
-function kruskalmds{T<:AbstractFloat}(D::AbstractMatrix{T}, p::Integer, X0=convert(Matrix{T},randn(size(D,1),p)); maxIter=1000, tol=1e-6)
+function kruskalmds(D::AbstractMatrix{T}, p::Integer, X0=convert(Matrix{T},randn(size(D,1),p)); maxIter=1000, tol=1e-6) where {T<:AbstractFloat}
     @assert p>0
     @assert D≈D' "Distance matrix must be symmetric"
     N = size(D,1)

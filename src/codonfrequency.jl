@@ -424,7 +424,7 @@ function setupproblem(observations::AbstractArray{CodonQualityDict,3})
 
 	# initial guess
 	s = sum(nbrComplete)
-	theta0 = nbrComplete[:]/(s>0?s:1)
+	theta0 = nbrComplete[:]/(s>0 ? s : 1)
 
 	theta0,rcc,counts
 end

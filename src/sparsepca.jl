@@ -3,7 +3,7 @@
 # binary search in interval (low,high)
 # assumes that if pred(x)==true, then pred(y)==true ∀y>x
 # assumes pred(low)==false and pred(high)==true
-function binary_search_interval{T<:AbstractFloat}(pred, low::T, high::T, precision::T)
+function binary_search_interval(pred, low::T, high::T, precision::T) where {T<:AbstractFloat}
     while high-low > precision
         mid = (low+high)/2
 

@@ -32,7 +32,7 @@ function groupequal(X,Y)
 end
 
 
-type LandscapeModel
+mutable struct LandscapeModel
     X::Matrix{Float64}
     fitness::Vector{Float64}
     σ::Float64
@@ -192,7 +192,7 @@ end
 
 
 
-type NearestNeighborModel{T}
+mutable struct NearestNeighborModel{T}
     X::Matrix{T}
     fitness::Vector{Float64}
     function NearestNeighborModel{T}(X::Matrix{T}, fitness::Vector{Float64}) where T
@@ -201,7 +201,7 @@ type NearestNeighborModel{T}
     end
 end
 # euclidean distance
-NearestNeighborModel{T<:Number}(X::AbstractMatrix{T},fitness) = NearestNeighborModel{Float64}(convert(Matrix{Float64},X), convert(Vector{Float64},fitness))
+NearestNeighborModel(X::AbstractMatrix{T},fitness) where {T<:Number} = NearestNeighborModel{Float64}(convert(Matrix{Float64},X), convert(Vector{Float64},fitness))
 # edit distance
 NearestNeighborModel(X::AbstractMatrix{Symbol},fitness) = NearestNeighborModel{Symbol}(convert(Matrix{Symbol},X), convert(Vector{Float64},fitness))
 
@@ -224,7 +224,7 @@ predictfitness(model::NearestNeighborModel{Symbol}, X::Matrix{Symbol}) = _predic
 
 # every row of X should consist of categorical values will be compared to other rows
 # X could be for instance be a vector of group IDs, a Matrix with categorical values or a DataFrame.
-type GroupModel{T}
+mutable struct GroupModel{T}
     X::T
     fitness::Vector{Float64}
     function GroupModel{T}(X::T, fitness::Vector{Float64}) where T
@@ -232,7 +232,7 @@ type GroupModel{T}
         new(X,fitness)
     end
 end
-GroupModel{T}(X::T,fitness) = GroupModel{T}(X, convert(Vector{Float64},fitness))
+GroupModel(X::T,fitness) where {T} = GroupModel{T}(X, convert(Vector{Float64},fitness))
 
 function _predictfitnessgroup(D::AbstractArray{Bool}, fitness::Vector{Float64})
     M,N = size(D)
@@ -243,7 +243,7 @@ function _predictfitnessgroup(D::AbstractArray{Bool}, fitness::Vector{Float64})
     end
     f
 end
-predictfitness{T}(model::GroupModel{T}, X::T) = _predictfitnessgroup(groupequal(X,model.X), model.fitness)
+predictfitness(model::GroupModel{T}, X::T) where {T} = _predictfitnessgroup(groupequal(X,model.X), model.fitness)
 
 
 

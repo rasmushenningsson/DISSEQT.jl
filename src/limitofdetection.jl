@@ -3,7 +3,7 @@
 # binary search in interval (low,high)
 # assumes that if pred(x)=true, then pred(y)=true ∀y>x
 # assumes pred(low)=false and pred(high)=true
-function binarysearchinterval{T<:AbstractFloat}(pred, low::T, high::T, precision::T)
+function binarysearchinterval(pred, low::T, high::T, precision::T) where {T<:AbstractFloat}
     while high-low > precision
         mid = (low+high)/2
 
@@ -23,7 +23,7 @@ function lodpred(α, f, r, threshold)
     N = length(f)
     norm(log2.(f.+α)-log2.(r.+α)) <= threshold*sqrt(N)
 end
-function _limitofdetection{T}(freqsF::Vector{T}, freqsR::Vector{T}, threshold, lgLow, lgHigh)
+function _limitofdetection(freqsF::Vector{T}, freqsR::Vector{T}, threshold, lgLow, lgHigh) where {T}
     @assert size(freqsF)==size(freqsR)
     lodpred(10.0^lgLow,freqsF,freqsR,log2(threshold)) && return 10.0^lgLow # early out
     10.0^binarysearchinterval( α->lodpred(10.0^α,freqsF,freqsR,log2(threshold)), lgLow, lgHigh, 1e-3) # logspace search for α
@@ -31,7 +31,7 @@ end
 
 
 # Two 4x4x4xN arrays, one per strand. N=Number of samples.
-function _limitofdetection{T}(freqs::Array{T,4}, freqsF::Array{T,4}, freqsR::Array{T,4}, threshold, lgLow, lgHigh)
+function _limitofdetection(freqs::Array{T,4}, freqsF::Array{T,4}, freqsR::Array{T,4}, threshold, lgLow, lgHigh) where {T}
     N = size(freqs,4)
     @assert size(freqs)==size(freqsF)==size(freqsR)==(4,4,4,N)
 

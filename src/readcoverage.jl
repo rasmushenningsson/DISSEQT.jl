@@ -1,5 +1,5 @@
 
-type ReadCoverageAccumulator
+mutable struct ReadCoverageAccumulator
 	dCoverage::Vector{Vector{Int}} # derivative of coverage - makes accumulation faster since only starting/ending points of read chunks must be collected
 end
 

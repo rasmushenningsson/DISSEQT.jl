@@ -1,15 +1,15 @@
 
 
 # saturated addition for positive numbers
-function addsaturated{T}(a::T,b::T)
+function addsaturated(a::T,b::T) where {T}
     r = a+b
     r<a || r<b ? typemax(T) : r # check for overflow
 end
-addsaturated{T<:AbstractFloat}(a::T,b::T) = a+b # Inf+a = Inf, so no overflow check is needed
+addsaturated(a::T,b::T) where {T<:AbstractFloat} = a+b # Inf+a = Inf, so no overflow check is needed
 
 # Finds the shortest paths between all pairs of nodes in an directed graph, specified by a matrix of pairwise distances.
 # If there are no edges between two nodes, the distance should be typemax(T) (which is Inf for Float64).
-function floydwarshall!{T<:Real}(D::AbstractMatrix{T})
+function floydwarshall!(D::AbstractMatrix{T}) where {T<:Real}
     @assert ndims(D)==2
     @assert size(D,1)==size(D,2)
     @assert all(D.>=0)
@@ -31,4 +31,4 @@ function floydwarshall!{T<:Real}(D::AbstractMatrix{T})
     # end
     D
 end
-floydwarshall{T<:Real}(D::AbstractMatrix{T}) = floydwarshall!(copy(D))
+floydwarshall(D::AbstractMatrix{T}) where {T<:Real} = floydwarshall!(copy(D))

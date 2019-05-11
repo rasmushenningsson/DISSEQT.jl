@@ -1,7 +1,7 @@
 
 
 # assumes symmetric matrix
-function mds{T<:AbstractFloat}(D::AbstractMatrix{T}, p::Integer)
+function mds(D::AbstractMatrix{T}, p::Integer) where {T<:AbstractFloat}
     @assert D==D'
     N = size(D,1)
     

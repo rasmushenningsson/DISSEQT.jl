@@ -1,13 +1,13 @@
 
 
-type MedianAccumulatorSimple{T}
+mutable struct MedianAccumulatorSimple{T}
     values::Vector{T}
     ind::Int
 end
-MedianAccumulatorSimple{T}(::Type{T},N) = MedianAccumulatorSimple(Vector{T}(2N+1),1)
+MedianAccumulatorSimple(::Type{T},N) where {T} = MedianAccumulatorSimple(Vector{T}(2N+1),1)
 
 
-function init!{T}(acc::MedianAccumulatorSimple{T}, A::AbstractArray{T}, N::Integer, dim::Integer, Ipost::CartesianIndex, Ipre::CartesianIndex)
+function init!(acc::MedianAccumulatorSimple{T}, A::AbstractArray{T}, N::Integer, dim::Integer, Ipost::CartesianIndex, Ipre::CartesianIndex) where {T}
     D = size(A,dim)
 
     ind = 1
@@ -22,7 +22,7 @@ function init!{T}(acc::MedianAccumulatorSimple{T}, A::AbstractArray{T}, N::Integ
     acc.ind = 1
     nothing
 end
-function update!{T}(acc::MedianAccumulatorSimple{T}, new::T)
+function update!(acc::MedianAccumulatorSimple{T}, new::T) where {T}
     acc.values[acc.ind] = new
     acc.ind = acc.ind==length(acc.values) ? 1 : acc.ind+1
     nothing
@@ -32,7 +32,7 @@ _median(acc::MedianAccumulatorSimple) = median(acc.values)
 
 # 1-dimensional median filter along the selected dimension
 # elements outside the range are considered to be the same as the edge elements
-function medianfilter{T}(A::AbstractArray{T}, N::Integer, dim::Integer=1)
+function medianfilter(A::AbstractArray{T}, N::Integer, dim::Integer=1) where {T}
     @assert N>=0
     (N == 0 || size(A,dim)==0) && return copy(A) # no-op
     B = similar(A)

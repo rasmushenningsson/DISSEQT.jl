@@ -1,7 +1,7 @@
 using BamReader
 
 
-type ConsensusInfo
+mutable struct ConsensusInfo
 	nucCounts::Array{Float64,2} # counts for A,C,G,T
 	nextBaseAligned::Array{Int,1} # counts for consecutive bases by covered by the same read
 	deletions::Array{Dict{Int,Int},1} # index i means deletion after i (length->reads supporting)
@@ -117,7 +117,7 @@ function consensus_single(ci::ConsensusInfo, ref, minSupport, indelMinSupport)
 		if ci.nucCounts[i,nuc] < minSupport
 			print(io,ref[i])
 		else
-			const bases = ['A','C','G','T']
+			bases = ['A','C','G','T']
 			print(io,bases[nuc])
 		end
 
