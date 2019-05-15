@@ -4,7 +4,7 @@ JLD
 StatsBase
 DataStructures
 DataFrames
-Bio
+BioSequences
 Convex
 SCS
 Optim

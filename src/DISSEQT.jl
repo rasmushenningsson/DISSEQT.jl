@@ -9,7 +9,7 @@ using JLD
 using StatsBase # for sample
 using DataStructures
 using DataFrames
-using Bio.Seq
+using BioSequences
 
 using AnnotatedArrays
 using BamReader

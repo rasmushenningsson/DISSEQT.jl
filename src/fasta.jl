@@ -1,6 +1,6 @@
 # for convenience
-const Sequence = Tuple{String,String}
-const Reference = Array{Sequence,1}
+const Seq = Tuple{String,String}
+const Reference = Array{Seq,1}
 
 
 function savefasta(filename::AbstractString, ref::Array{Tuple{String,String},1})
@@ -27,8 +27,11 @@ savefasta(filename::AbstractString, ref::Tuple{String,String}) = savefasta(filen
 
 # Bio.Seq version
 function loadfasta(ref::AbstractString) 
-	a = collect(open(FASTAReader{DNASequence},ref))
-	Sequence[(seqname(s),convert(String,sequence(s))) for s in a]
+	# a = collect(open(FASTAReader{DNASequence},ref))
+	# Seq[(seqname(s),convert(String,sequence(s))) for s in a]
+	open(FASTA.Reader,ref) do io
+		Seq[(seqname(record),string(sequence(record))) for record in io]
+	end
 end
 
 
