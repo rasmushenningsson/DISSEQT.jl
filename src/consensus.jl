@@ -86,17 +86,7 @@ end
 
 
 
-function dict_max(d)
-  maxkey, maxvalue = next(d, start(d))[1]
-  for (key, value) in d
-    if value > maxvalue
-      maxkey = key
-      maxvalue = value
-    end
-  end
-  maxkey,maxvalue
-end
-dict_max(d,defaultKey,defaultValue) = isempty(d) ? (defaultKey,defaultValue) : dict_max(d)
+dict_max(d::Dict,defaultKey,defaultValue) = isempty(d) ? (defaultKey=>defaultValue) : (k=argmax(d);k=>d[k])
 
 
 
