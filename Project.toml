@@ -15,4 +15,5 @@ StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 SynapseClient = "bcb84a12-78c7-11e9-04c6-8933c0472cec"
 
 [compat]
-julia = "0.7, 1"
+SynapseClient = "0.2"
+julia = "1"
