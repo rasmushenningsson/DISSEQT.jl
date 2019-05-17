@@ -5,10 +5,12 @@ version = "0.2.0"
 
 [deps]
 BioSequences = "7e6ae17a-c86d-528c-b3b9-7f778a29fe59"
+BufferedStreams = "e1450e63-4bb3-523b-b2a4-4ffa8c0fd77d"
 Convex = "f65535da-76fb-5f13-bab9-19810c17039a"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 JLD = "4138dd39-2aa7-5051-a626-17a0bb65d9c8"
+Libz = "2ec943e9-cfe8-584d-b93d-64dcb6d567b7"
 Optim = "429524aa-4258-5aef-a3af-852621145aeb"
 SCS = "c946c3f1-0d1f-5ce8-9dea-7daa1f7e2d13"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"

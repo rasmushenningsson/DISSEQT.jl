@@ -1,0 +1,22 @@
+const BAM_FPAIRED        =    1 # the read is paired in sequencing, no matter whether it is mapped in a pair
+const BAM_FPROPER_PAIR   =    2 # the read is mapped in a proper pair
+const BAM_FUNMAP         =    4 # the read itself is unmapped; conflictive with BAM_FPROPER_PAIR
+const BAM_FMUNMAP        =    8 # the mate is unmapped
+const BAM_FREVERSE       =   16 # the read is mapped to the reverse strand
+const BAM_FMREVERSE      =   32 # the mate is mapped to the reverse strand
+const BAM_FREAD1         =   64 # this is read1
+const BAM_FREAD2         =  128 # this is read2
+const BAM_FSECONDARY     =  256 # not primary alignment
+const BAM_FQCFAIL        =  512 # QC failure
+const BAM_FDUP           = 1024 # optical or PCR duplicate
+const BAM_FSUPPLEMENTARY = 2048 # supplementary alignment
+
+const CIGAR_M  = 0
+const CIGAR_I  = 1
+const CIGAR_D  = 2
+const CIGAR_N  = 3
+const CIGAR_S  = 4
+const CIGAR_H  = 5
+const CIGAR_P  = 6
+const CIGAR_Eq = 7
+const CIGAR_X  = 8

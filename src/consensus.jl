@@ -1,6 +1,3 @@
-using BamReader
-
-
 mutable struct ConsensusInfo
 	nucCounts::Array{Float64,2} # counts for A,C,G,T
 	nextBaseAligned::Array{Int,1} # counts for consecutive bases by covered by the same read

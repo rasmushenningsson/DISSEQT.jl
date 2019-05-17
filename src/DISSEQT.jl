@@ -3,11 +3,10 @@ module DISSEQT
 
 # submodules
 include("AnnotatedArrays/AnnotatedArrays.jl")
+include("BamReader/BamReader.jl")
+include("Kruskal/Kruskal.jl")
 
 
-using Pkg
-
-haskey(Pkg.installed(),"BamReader") || @warn("Module BamReader not installed. Please refer to DISSEQT installation instructions at https://github.com/rasmushenningsson/DISSEQT.jl")
 
 using JLD
 using StatsBase # for sample
@@ -16,7 +15,9 @@ using DataFrames
 using BioSequences
 
 using .AnnotatedArrays
-using BamReader
+using .BamReader
+
+using .Kruskal
 
 
 # TODO: get rid of these dependencies - only used by estimatesamplemix
@@ -44,10 +45,6 @@ include("mds.jl")
 include("hierarchicalclustering.jl")
 include("medianfilter.jl")
 include("fitnessmodels.jl")
-
-include("Kruskal.jl")
-using .Kruskal
-
 include("isomap.jl")
 
 

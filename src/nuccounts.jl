@@ -1,6 +1,3 @@
-using BamReader
-
-
 const NucQualityDict = Dict{UInt8,Int}
 
 
