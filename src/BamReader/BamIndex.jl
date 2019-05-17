@@ -38,7 +38,7 @@ function reg2bins(s::Int, e::Int)
 	e = e-1 # 1-based to 0-based
 	# Original implementation is for closed intervals (if we skip end--), so e is correct.
 
-	bins = Array{Int,1}()
+	bins = Int[]
 	push!(bins, 0)
 	append!(bins,    1 + (s>>26) :     1 + (e>>26))
 	append!(bins,    9 + (s>>23) :     9 + (e>>23))
@@ -154,18 +154,15 @@ show(io::IO, bin::Bin) = print(io,bin)
 
 # BamIndex for a single reference
 mutable struct BamIndexRef
-	#bins::Array{Bin,1} # TODO: change to Dict mapping distinct bin to chunk list?
 	bins::Dict{Int,Bin}
-	linearIndex::Array{VirtualOffset,1}
+	linearIndex::Vector{VirtualOffset}
 end
 
 function BamIndexRef(is::IO)
 	nBins = Int(read(is,Int32))
-	#bins = Array{Bin,1}(nBins)
 	bins = Dict{Int,Bin}()
 
 	for i=1:nBins
-		#bins[i] = Bin(is)
 		b = Bin(is)
 		bins[b.bin] = b
 	end
@@ -178,10 +175,10 @@ end
 
 
 mutable struct BamIndex
-	refs::Array{BamIndexRef,1}
+	refs::Vector{BamIndexRef}
 	nbrNoCooord::UInt64
 end
-BamIndex() = BamIndex(Array{BamIndexRef,1}(),0) # empty bam index
+BamIndex() = BamIndex(Vector{BamIndexRef}(),0) # empty bam index
 
 isempty(index::BamIndex) = length(index.refs)==0 && index.nbrNoCooord==0
 
@@ -266,10 +263,10 @@ end
 
 
 mutable struct ChunkQueue
-	queues::Array{ChunkQueueSingle,1}
+	queues::Vector{ChunkQueueSingle}
 	pq::PriorityQueue{Int,Chunk} # bin level -> Chunk (the bin level is the index in array of single queues)
 
-	function ChunkQueue(queues::Array{ChunkQueueSingle,1}, pq::PriorityQueue{Int,Chunk})
+	function ChunkQueue(queues::Vector{ChunkQueueSingle}, pq::PriorityQueue{Int,Chunk})
 		@assert length(queues)==6 "Incorrect number of bin levels."
 		for i=1:length(queues)
 			isempty(queues[i]) || (pq[i] = shift!(queues[i]))
@@ -278,8 +275,8 @@ mutable struct ChunkQueue
 	end
 end
 
-ChunkQueue(queues::Array{ChunkQueueSingle,1}) = ChunkQueue(queues,PriorityQueue(Int,Chunk))
-ChunkQueue(index::BamIndexRef, binRanges::Array{UnitRange{Int},1}) = ChunkQueue(map(x->ChunkQueueSingle(index,x), binRanges))
+ChunkQueue(queues::Vector{ChunkQueueSingle}) = ChunkQueue(queues,PriorityQueue(Int,Chunk))
+ChunkQueue(index::BamIndexRef, binRanges::Vector{UnitRange{Int}}) = ChunkQueue(map(x->ChunkQueueSingle(index,x), binRanges))
 ChunkQueue(index::BamIndexRef, region::UnitRange{Int}) = ChunkQueue(index,reg2binranges(region[1], region[end]))
 ChunkQueue(index::BamIndex, refID::Int, region::UnitRange{Int}) = ChunkQueue(index.refs[refID+1], reg2binranges(region[1], region[end]))
 

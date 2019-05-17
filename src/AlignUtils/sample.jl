@@ -112,7 +112,7 @@ _ismatch(f::Function, s::AbstractString) = f(s)
 
 
 # each sample name should match exactly one of the patterns ref[i][1] ∀i=1...n and will be assigned the corresponding reference name ref[i][2]
-function assign_reference!(samples::Array{Sample,1}, refs::Vector; log=devnull)
+function assign_reference!(samples::Vector{Sample}, refs::Vector; log=devnull)
 	patterns = [r[1] for r in refs]
 	refNames = [r[2] for r in refs]
 

@@ -36,7 +36,7 @@ function _limitofdetection(freqs::Array{T,4}, freqsF::Array{T,4}, freqsR::Array{
     @assert size(freqs)==size(freqsF)==size(freqsR)==(4,4,4,N)
 
     # group samples by consensus codon
-    consensusInd = map(i->indmax(freqs[:,:,:,i]), 1:N)
+    consensusInd = map(i->argmax(freqs[:,:,:,i]), 1:N)
 
     lod = (10.0^lgLow)*ones(T,4,4,4)
 

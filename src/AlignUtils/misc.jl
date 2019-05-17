@@ -1,6 +1,6 @@
 # for convenience (use DISSEQT typealiases instead?)
 const Seq = Tuple{String,String}
-const Reference = Array{Seq,1}
+const Reference = Vector{Seq}
 
 
 function askforconfirmation(str::AbstractString)

@@ -1,8 +1,8 @@
 mutable struct ConsensusInfo
-	nucCounts::Array{Float64,2} # counts for A,C,G,T
-	nextBaseAligned::Array{Int,1} # counts for consecutive bases by covered by the same read
-	deletions::Array{Dict{Int,Int},1} # index i means deletion after i (length->reads supporting)
-	insertions::Array{Dict{String,Int},1} # index i means insertion after i (string->reads supporting)
+	nucCounts::Matrix{Float64} # counts for A,C,G,T
+	nextBaseAligned::Vector{Int} # counts for consecutive bases by covered by the same read
+	deletions::Vector{Dict{Int,Int}} # index i means deletion after i (length->reads supporting)
+	insertions::Vector{Dict{String,Int}} # index i means insertion after i (string->reads supporting)
 end
 
 function ConsensusInfo(refLength::Int)
@@ -59,7 +59,7 @@ function aggregate_reads(bamFile; mappingQualityThreshold::Int=30, ignoreChimeri
 				readOffs = readpos(c)-1
 				
 				# TODO: implement better way to get substring of seq
-				buf = Array{UInt8}(len(c))
+				buf = zeros(UInt8,len(c))
 				for j=1:len(c)
 					buf[j] = base_char(s[readOffs+j])
 				end
@@ -110,7 +110,7 @@ function consensus_single(ci::ConsensusInfo, ref, minSupport, indelMinSupport)
 	i = 1
 	while i<=refLength
 
-		nuc = indmax(ci.nucCounts[i,:])
+		nuc = argmax(ci.nucCounts[i,:])
 		if ci.nucCounts[i,nuc] < minSupport
 			print(io,ref[i])
 		else
@@ -174,7 +174,7 @@ function consensus(bamFile::BamFile, fasta::Union{AbstractString,Reference,Abstr
 
 
 	# make a new fasta file, keeping the same order as in the fasta file
-	outFasta = Array{Tuple{String,String},1}(length(fasta))
+	outFasta = Vector{Tuple{String,String}}(undef,length(fasta))
 
 	for fastaInd = 1:length(fasta)
 		# find corresponding index in BAM

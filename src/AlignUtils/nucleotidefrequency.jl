@@ -3,9 +3,9 @@
 # reuse saving functions in codonfrequency.jl
 
 
-function computenucleotidefrequencies(sample::String, 
-                                      inFolder::String, outFolder::String; 
-                                      strands=:both, mappingQualityThreshold=30, 
+function computenucleotidefrequencies(sample::String,
+                                      inFolder::String, outFolder::String;
+                                      strands=:both, mappingQualityThreshold=30,
                                       baseQualityThreshold=30,
                                       method=:Newton, newtonRegularization=1e-6,
                                       outFormat=:JLD)
@@ -48,7 +48,7 @@ end
 
 
 # TODO: logging
-function computenucleotidefrequencies(samples::Array{String,1}, 
+function computenucleotidefrequencies(samples::Vector{String},
                                       inFolder::String, outFolder::String;
                                       log=STDOUT, kwargs...)
 

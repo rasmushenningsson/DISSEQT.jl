@@ -76,7 +76,7 @@ function readcoverage(inputs::AbstractArray; kwargs...)
 
 	@assert all(nbrSeqsPerSample .== nbrSeqs) "All samples must have the same number of reference sequences."
 
-	covMatrices = Vector{Array{Int,2}}(nbrSeqs)
+	covMatrices = Vector{Matrix{Int}}(undef,nbrSeqs)
 	for i=1:nbrSeqs
 		seqLengthPerSample = map( x->length(x[i]), coverage )
 		seqLength = maximum(seqLengthPerSample) # To avoid failing if some samples have indels

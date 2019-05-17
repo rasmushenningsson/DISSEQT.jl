@@ -3,8 +3,8 @@ function _pointlayer(df::DataFrame, x::Symbol, y::Symbol; groupBy::Symbol=Symbol
     groupBy==Symbol() ? layer(df,x=x,y=y,Geom.point) : layer(df,x=x,y=y,color=groupBy,Geom.point)
 end
 function _dataframelinearregression(df::DataFrame,x::Symbol,y::Symbol,group=[])
-    dataX = convert(Array, df[x])
-    dataY = convert(Array, df[y])
+    dataX = convert(Vector, df[x])
+    dataY = convert(Vector, df[y])
     xVals = collect(extrema(dataX))
 
     A = xVals[2]-xVals[1] > 1e-6 ?

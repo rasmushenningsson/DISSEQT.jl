@@ -1,7 +1,7 @@
 
 _uniqueid(a::AbstractVector) = indexin(a,unique(a)) # TODO: replace with indunique() or similar when it is introduced in julia (c.f. sort() and sortperm())
 
-function _partitionpositions(referenceCodons::AbstractArray{Symbol,2})
+function _partitionpositions(referenceCodons::AbstractMatrix{Symbol})
     # for each position, assign an ID number to each reference s.t. they have the same ID if they coincide at that position
     IDPerPos = Vector{Int}[ _uniqueid(referenceCodons[i,:][:]) for i=1:size(referenceCodons,1) ]
     _uniqueid(IDPerPos) # give each position a number depending on which equivalence class it is in
@@ -9,7 +9,7 @@ end
 
 
 
-function _partitionmatrices(partitionInd::AbstractVector{Int}, referenceCodons::AbstractArray{Symbol,2}, freqs::AbstractArray{Float64,3}, codons::Vector{Symbol})
+function _partitionmatrices(partitionInd::AbstractVector{Int}, referenceCodons::AbstractMatrix{Symbol}, freqs::AbstractArray{Float64,3}, codons::Vector{Symbol})
     @assert size(referenceCodons,1)==size(freqs,2)
 
     nbrSamples = size(freqs,3)

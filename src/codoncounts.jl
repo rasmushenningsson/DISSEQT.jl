@@ -31,9 +31,9 @@ const CodonQualityMap = Array{CodonQualityDict,4}
 codonqualitymap(len::Int) = CodonQualityDict[CodonQualityDict() for n1=1:4,n2=1:4,n3=1:4, i=1:len]
 
 
-const CodonQualityAccumulator = Array{CodonQualityMap,1}
+const CodonQualityAccumulator = Vector{CodonQualityMap}
 
-codonqualityaccumulator(lengths::Array{Int,1}) = CodonQualityMap[codonqualitymap(l) for l in lengths]
+codonqualityaccumulator(lengths::Vector{Int}) = CodonQualityMap[codonqualitymap(l) for l in lengths]
 codonqualityaccumulator(len::Int) = codonqualityaccumulator([len])
 
 
@@ -52,7 +52,7 @@ end
 
 # qualityfilter! replaces all quality values below threshold with 0
 #                and merges keys that are equal
-function qualityfilter!(d::CodonQualityDict, threshold::Integer, scratch::Array{CodonQualityTriplet,1}=Array{CodonQualityTriplet,1}())
+function qualityfilter!(d::CodonQualityDict, threshold::Integer, scratch::Vector{CodonQualityTriplet}=CodonQualityTriplet[])
 	isempty(d) && return
 
 	resize!(scratch,0)
@@ -79,12 +79,12 @@ function qualityfilter!(d::CodonQualityDict, threshold::Integer, scratch::Array{
 		end
 	end
 end
-function qualityfilter!(m::CodonQualityMap, threshold::Integer, scratch::Array{CodonQualityTriplet,1}=Array{CodonQualityTriplet,1}())
+function qualityfilter!(m::CodonQualityMap, threshold::Integer, scratch::Vector{CodonQualityTriplet}=CodonQualityTriplet[])
 	for d in m
 		qualityfilter!(d,threshold,scratch)
 	end
 end
-function qualityfilter!(a::CodonQualityAccumulator, threshold::Integer, scratch::Array{CodonQualityTriplet,1}=Array{CodonQualityTriplet,1}())
+function qualityfilter!(a::CodonQualityAccumulator, threshold::Integer, scratch::Vector{CodonQualityTriplet}=CodonQualityTriplet[])
 	for m in a
 		qualityfilter!(m,threshold,scratch)
 	end
@@ -102,11 +102,11 @@ function nbrcompletecodons(d::CodonQualityDict)
 end
 
 
-# function removeambiguous!(d::CodonQualityDict,complete::Array{Bool,3},scratch::Array{CodonQualityTriplet,1}=Array{CodonQualityTriplet,1}())
+# function removeambiguous!(d::CodonQualityDict,complete::Array{Bool,3},scratch::Vector{CodonQualityTriplet}=CodonQualityTriplet[])
 # end
 
 # handles 4x4x4 matrix for a given position in the reference
-function removeambiguous!(a::AbstractArray{T,3},scratch::Array{CodonQualityTriplet,1}=Array{CodonQualityTriplet,1}()) where {T}
+function removeambiguous!(a::AbstractArray{T,3},scratch::Vector{CodonQualityTriplet}=CodonQualityTriplet[]) where {T}
 	complete = map(hascompletecodon,a)
 
 	for c1=1:4
@@ -134,13 +134,13 @@ function removeambiguous!(a::AbstractArray{T,3},scratch::Array{CodonQualityTripl
 	end
 end
 
-function removeambiguous!(m::CodonQualityMap,scratch::Array{CodonQualityTriplet,1}=Array{CodonQualityTriplet,1}())
+function removeambiguous!(m::CodonQualityMap,scratch::Vector{CodonQualityTriplet}=CodonQualityTriplet[])
 	for p=1:size(m,4)
 		#println(p)
 		removeambiguous!(view(m,:,:,:,p),scratch)
 	end
 end
-function removeambiguous!(a::CodonQualityAccumulator,scratch::Array{CodonQualityTriplet,1}=Array{CodonQualityTriplet,1}())
+function removeambiguous!(a::CodonQualityAccumulator,scratch::Vector{CodonQualityTriplet}=CodonQualityTriplet[])
 	for m in a
 		removeambiguous!(m,scratch)
 	end

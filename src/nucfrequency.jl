@@ -13,7 +13,7 @@ end
 
 
 
-function setupproblem(observations::AbstractArray{NucQualityDict,1})
+function setupproblem(observations::AbstractVector{NucQualityDict})
 	@assert size(observations)==(4,) # allow trailing ones?
 
 	# for each of the 4 nucleotides and each unique quality value in them
@@ -48,7 +48,7 @@ end
 # TODO: add logging!
 
 
-function mlnucfreqs(observations::AbstractArray{NucQualityDict,1}; 
+function mlnucfreqs(observations::AbstractVector{NucQualityDict};
 					method=:Newton, newtonRegularization=1e-6)
 	theta0,rcn,counts = setupproblem(observations)
 	coverage = sum(counts)
@@ -84,9 +84,9 @@ end
 # solve for the whole genome
 function mlnucfreqs(nqa::NucQualityAccumulator; log=STDOUT, method=:Newton, newtonRegularization=1e-6)
 	N = length(nqa)
-	freqs = Vector{Array{Float64,2}}(N)
-	positions = Vector{Vector{Int}}(N)
-	coverage = Vector{Vector{Int}}(N)
+	freqs = Vector{Matrix{Float64}}(undef,N)
+	positions = Vector{Vector{Int}}(undef,N)
+	coverage = Vector{Vector{Int}}(undef,N)
 	for (i,m) in enumerate(nqa)
 		freqs[i],positions[i],coverage[i] = mlnucfreqs(m,log=log,method=method,
                                                        newtonRegularization=newtonRegularization)
@@ -97,7 +97,7 @@ end
 
 
 # solve for bam file
-function mlnucfreqs(bamFile::BamFile; log=STDOUT, strands=:both, 
+function mlnucfreqs(bamFile::BamFile; log=STDOUT, strands=:both,
                     mappingQualityThreshold=30, baseQualityThreshold=30,
                     ignoreChimeric::Bool=true,
                     method=:Newton, newtonRegularization=1e-6)

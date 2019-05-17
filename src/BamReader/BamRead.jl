@@ -40,7 +40,7 @@ mutable struct BamRead
 	tlen::Int32
 
 	# remaining data of unknown size
-	buf::Array{UInt8,1}
+	buf::Vector{UInt8}
 
 	# information to make indexing into buf quicker
 	#cigar_start::Int
@@ -52,7 +52,7 @@ mutable struct BamRead
 	# tags_parsed::Bool
 	# tagDict::Dict{Tag,Int} # TAG->offset to start of tag (type byte) in buf
 	tagsParsePos::Int # byte offset of next tag to parse
-	tagInfo::Array{Tuple{Tag,Int},1}
+	tagInfo::Vector{Tuple{Tag,Int}}
 end
 
 #BamRead() = BamRead(0,0,0,0,0,0,0,0,0,Array{UInt8,1}(INITIAL_READ_SIZE),-1,-1)
@@ -137,7 +137,7 @@ function nextread!(io,r::BamRead)
 	if reqsize>length(r.buf)
 		sz = nextpow2(reqsize)
 		@assert sz<=MAX_READ_SIZE "Read does not fit in maximum read buffer size ($MAX_READ_SIZE bytes)."
-		r.buf = Array{UInt8,1}(sz)
+		r.buf = zeros(UInt8,sz)#Vector{UInt8}(sz)
 	end
 
 	# println("reqsize: ", reqsize)
@@ -155,7 +155,7 @@ end
 # CIGAR and Seq needs to be (immutable) types rather than simple arrays so that we can interpret them for the user
 
 # TODO: should CIGAR be a subtype of AbstractArray???
-struct CIGAR{T<:AbstractArray{UInt8}}
+struct CIGAR{T<:AbstractVector{UInt8}}
 	# TODO: Probably make the array type a type parameter. 
 	# This way, it also makes sure we don't need to wrap the array into a subarray when it's not necessary.
 	# buf::SubArray{UInt8,1,Array{UInt8,1},Tuple{UnitRange{Int}},true}
@@ -197,12 +197,12 @@ struct SeqElement
 end
 
 # TODO: should Seq be a subtype of AbstractArray???
-struct Seq <: AbstractArray{SeqElement,1}
+struct Seq <: AbstractVector{SeqElement}
 	#buf::SubArray{UInt8,1,Array{UInt8,1},Tuple{UnitRange{Int}},1}
-	buf::Array{UInt8,1} # the entire buffer with the read (same as BamRead.buf)
+	buf::Vector{UInt8} # the entire buffer with the read (same as BamRead.buf)
 	#start::Int          # offset into read buffer - TODO: change to half-bytes to allow substrings???
 	start::Int         # offset in half-bytes into read buffer
-	len::Int            # length in half-bytes!
+	len::Int           # length in half-bytes!
 end
 
 

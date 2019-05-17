@@ -49,7 +49,7 @@ function annotatevariants!(swarm::AnnotatedArray, featureTable::DataFrame, refer
 
     sz = map(max, size(pos), size(variantAA)) # replace with broadcast_shape?
     # variant in style: feature-refAA-featurePos-variantAA
-    variant = broadcast!( (f,r,p,v)->"$f-$r$p$v", Array{String}(sz), feature, refAA, fpos, variantAA)
+    variant = broadcast!( (f,r,p,v)->"$f-$r$p$v", Vector{String}(undef,sz), feature, refAA, fpos, variantAA)
 
     annotate!(swarm,:feature,feature)
     annotate!(swarm,:variant,variant)
@@ -68,6 +68,6 @@ function variantdescriptions(pos, codons, featureTable::DataFrame, reference::Ab
 
     sz = map(max, size(pos), size(variantAA)) # replace with broadcast_shape?
     # variant in style: feature-refAA-featurePos-variantAA
-    variants = broadcast!( (f,r,p,v)->"$f-$r$p$v", Array{String}(sz), feature, refAA, fpos, variantAA)
+    variants = broadcast!( (f,r,p,v)->"$f-$r$p$v", Vector{String}(undef,sz), feature, refAA, fpos, variantAA)
     variants[:]
 end

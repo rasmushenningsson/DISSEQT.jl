@@ -1,9 +1,9 @@
 # for convenience
 const Seq = Tuple{String,String}
-const Reference = Array{Seq,1}
+const Reference = Vector{Seq}
 
 
-function savefasta(filename::AbstractString, ref::Array{Tuple{String,String},1})
+function savefasta(filename::AbstractString, ref::Vector{Tuple{String,String}})
 	io = open(filename,"w")
 
 	for (name,seq) in ref
@@ -51,4 +51,4 @@ const codon2aaDict = Dict{Symbol,Symbol}(:AAA=>:K, :AAC=>:N, :AAG=>:K, :AAT=>:N,
 codon2aa(c::Symbol) = get(codon2aaDict,c,:?)
 codon2aa(c::AbstractString) = codon2aa(convert(Symbol,c))
 
-codon2aa(A::AbstractArray) = map!(codon2aa,Array{Symbol}(size(A)),A)
+codon2aa(A::AbstractArray) = map!(codon2aa,Array{Symbol}(undef,size(A)),A)

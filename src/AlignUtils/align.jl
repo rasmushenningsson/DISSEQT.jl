@@ -2,7 +2,7 @@
 const OneOrTwo{T} = Union{T,Tuple{T,T}}
 
 
-function concatfastq(fastq::Array{String,1}, singleFastq::String; log=devnull)
+function concatfastq(fastq::Vector{String}, singleFastq::String; log=devnull)
 	println(log, "--- Concatenating fastq from $(length(fastq)) files ---"); flush(log)
 	err = DiskBuffer()
 	err2 = DiskBuffer()
@@ -108,7 +108,7 @@ end
 
 
 function bwaindexfilescreated(reference::String)
-	files = Array{String,1}()
+	files = String[]
 	push!(files, reference * ".amb")
 	push!(files, reference * ".ann")
 	push!(files, reference * ".bwt")
@@ -176,7 +176,7 @@ function bamindex(sortedBam::String; log=devnull)
 end
 
 
-function removetempfiles(tempFiles::Array{String,1}; log=devnull)
+function removetempfiles(tempFiles::Vector{String}; log=devnull)
 	println(log, "--- Removing temporary files ---"); flush(log)
 	for t in tempFiles
 		if isfile(t)
@@ -216,14 +216,14 @@ trimmedfastqname(singleFastq::Tuple{String,String}, prefix::String, tempFiles) =
 	 trimmedfastqname(singleFastq[2],"$(prefix)_2",tempFiles))
 
 
-function align_sample!(sample::Sample, adapters::String, 
+function align_sample!(sample::Sample, adapters::String,
 	                   outFolder::String, tempFolder::String; 
 	                   log::IO=devnull, globalLog::IO=devnull, 
 	                   maxAlignIterations::Int=5, consensusMinSupport::Int=100,
 	                   consensusIndelMinSupport::Int=consensusMinSupport,
 	                   keepUnmapped::Bool=true,
 	                   nbrThreads::Int=4)
-	tempFiles = Array{String,1}()
+	tempFiles = String[]
 
 	# make sure fastq-files are concatenated
 	ret,singleFastq = singlefastq(sample.fastqLocal,sample.fastqLocal2,joinpath(tempFolder,sample.name),tempFiles,log)
@@ -302,14 +302,14 @@ function align_sample!(sample::Sample, adapters::String,
 	if ret != 0
 		removetempfiles(tempFiles, log=log)
 		printiferror(globalLog, "$(sample.name): Bam sorting failed.")
-		return ret	
+		return ret
 	end
 
 	ret = bamindex(sample.bam; log=log)
 	if ret != 0
 		removetempfiles(tempFiles, log=log)
 		printiferror(globalLog, "$(sample.name): Bam indexing failed.")
-		return ret	
+		return ret
 	end
 
 	removetempfiles(tempFiles, log=log)
@@ -322,7 +322,7 @@ end
 
 
 # helper function made to be called by pmap
-function align_single!(sample::Sample, adapters::String, 
+function align_single!(sample::Sample, adapters::String,
                        outFolder::String, tempFolder::String,
                        maxAlignIterations::Int, consensusMinSupport::Int, 
 	                   consensusIndelMinSupport::Int,
@@ -349,7 +349,7 @@ end
 
 
 
-function align_samples!(syn, samples::Array{Sample,1}, adapters::String, 
+function align_samples!(syn, samples::Vector{Sample}, adapters::String,
                         outFolder::String, tempFolder::String,
                         log::IO;
                         maxAlignIterations::Int=5, consensusMinSupport::Int=1, 

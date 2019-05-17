@@ -1,6 +1,6 @@
 mutable struct BGZFBlockStream
 	io::IO # underlying compressed data
-	block::Array{UInt8,1} # current BGZF block
+	block::Vector{UInt8} # current BGZF block
 	#zio # TODO: set type?
 	zio::BufferedInputStream{Libz.Source{:inflate,BufferedInputStream{BufferedStreams.EmptyStream}}}
 
@@ -8,7 +8,7 @@ mutable struct BGZFBlockStream
 	pos::VirtualOffset
 end
 
-function BGZFBlockStream(io::IO, block::Array{UInt8,1}=Array{UInt8,1}())
+function BGZFBlockStream(io::IO, block::Vector{UInt8}=UInt8[])
 	block = readblock(io,block)
 	BGZFBlockStream(io,block,ZlibInflateInputStream(block),VirtualOffset(0))
 end
@@ -16,9 +16,9 @@ BGZFBlockStream(filename::AbstractString) = BGZFBlockStream(open(filename))
 
 
 
-function readblock(io::IO, block::Array{UInt8,1})
+function readblock(io::IO, block::Vector{UInt8})
 	pos = position(io)
-	header = Array{UInt8,1}(12+6)
+	header = zeros(UInt8,12+6)
 	readbytes!(io,header,12+6)
 
 	# println("magic: ", header[1:4])

@@ -3,7 +3,7 @@ const NucQualityDict = Dict{UInt8,Int}
 
 # dimensions: nuc, pos
 # where nuc is A,C,G or T
-const NucQualityMap = Array{NucQualityDict,2}
+const NucQualityMap = Matrix{NucQualityDict}
 
 # init Dict for each nuc and position
 nucqualitymap(len::Int) = NucQualityDict[NucQualityDict() for n=1:4, i=1:len]

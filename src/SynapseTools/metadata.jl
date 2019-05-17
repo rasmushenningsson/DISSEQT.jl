@@ -58,7 +58,7 @@ end
 filtermetadata(metadata::DataFrame, filter::Symbol) = filter in names(metadata) ? metadata : DataFrame()
 function filtermetadata(metadata::DataFrame, filter::Pair{Symbol,T}) where {T<:AbstractArray}
     filter.first in names(metadata) || return DataFrame()
-    mask = map!(x->!ismissing(x) && x in filter.second, BitArray(size(metadata,1)), metadata[filter.first])
+    mask = map!(x->!ismissing(x) && x in filter.second, falses(size(metadata,1)), metadata[filter.first])
     countnz(mask)==0 ? DataFrame() : metadata[mask,:]
 end
 function filtermetadata(metadata::DataFrame, filter::Pair{Symbol,T}) where {T}
@@ -68,12 +68,12 @@ function filtermetadata(metadata::DataFrame, filter::Pair{Symbol,T}) where {T}
 end
 function filtermetadata(metadata::DataFrame, filter::Pair{Symbol,Function}) 
     filter.first in names(metadata) || return DataFrame()
-    mask = map!(filter.second, BitArray(size(metadata,1)), metadata[filter.first])
+    mask = map!(filter.second, falses(size(metadata,1)), metadata[filter.first])
     countnz(mask)==0 ? DataFrame() : metadata[mask,:]
 end
 function filtermetadata(metadata::DataFrame, filter::Function) 
     N = size(metadata,1)
-    mask = BitArray(N)
+    mask = falses(N)
     for i=1:N
         mask[i] = filter(metadata[i,:])
     end
@@ -141,7 +141,7 @@ function appendsynapseids!(syn, metadata::DataFrame, folderID::AbstractString, f
 
         
         for (suffix,columnName) in zip(fileSuffixes,columnNames)
-            fileMask = BitArray(length(filenames))
+            fileMask = falses(length(filenames))
             map!( x->endswith(x,suffix), fileMask, filenames ) # find matches for suffix
             
             matchingIDs   = fileIDs[fileMask] # Synapse ids for files with matching suffix

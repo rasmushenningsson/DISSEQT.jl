@@ -40,7 +40,7 @@ end
 
 function reference_sanity_check(sample::Sample,
                                 references::Array{Reference}, 
-                                referenceNames::Array{String,1}, log)
+                                referenceNames::Vector{String}, log)
 	if isempty(sample.consensus)
 		printiferror(log, "$(sample.name): No consensus file specified. (Alignment failed?)")
 		return

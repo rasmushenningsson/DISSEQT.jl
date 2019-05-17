@@ -37,7 +37,7 @@ function kkt(x,rcc,counts)
 	g = grad(x,rcc,counts)
 
 	# we can compute what ν *should* be, by looking at any nonzero xᵢ
-	i = indmax(x)
+	i = argmax(x)
 	ν = -g[i]
 
 	λ = max.( (g+ν).*(x.==0), 0 )
@@ -472,9 +472,9 @@ function mlcodonfreqs(cqa::CodonQualityAccumulator; log=STDOUT, method=:Newton, 
 	# Array{Float64,4}[mlcodonfreqs(m,log=log,method=method,
 	# 				 newtonRegularization=newtonRegularization) for m in cqa]
 	N = length(cqa)
-	freqs = Array{Array{Float64,4},1}(N)
-	positions = Array{Array{Int,1},1}(N)
-	coverage = Array{Array{Int,1},1}(N)
+	freqs = Vector{Array{Float64,4}}(undef,N)
+	positions = Vector{Vector{Int}}(undef,N)
+	coverage = Vector{Vector{Int}}(undef,N)
 	for (i,m) in enumerate(cqa)
 		freqs[i],positions[i],coverage[i] = mlcodonfreqs(m,log=log,method=method,
 	 				                                     newtonRegularization=newtonRegularization,
