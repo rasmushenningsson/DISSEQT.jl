@@ -1,5 +1,10 @@
 module DISSEQT
 
+
+# submodules
+include("AnnotatedArrays/AnnotatedArrays.jl")
+
+
 using Pkg
 
 haskey(Pkg.installed(),"BamReader") || @warn("Module BamReader not installed. Please refer to DISSEQT installation instructions at https://github.com/rasmushenningsson/DISSEQT.jl")

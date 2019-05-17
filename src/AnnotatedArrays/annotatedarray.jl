@@ -446,18 +446,18 @@ function show(io::IO, A::AnnotatedArray)
 
 	if sz==szSub
 		println(io, join(sz,'x'), " ", typeof(A), ":")
-		showall(A)
+		showall(io, A)
 	else
 		B = view(A, map(n->1:n, szSub)...)
 		println(io, "Showing ", join(szSub,'x'), " part of ", join(sz,'x'), " ", typeof(A), ":")
-		showall(B)
+		showall(io, B)
 	end
 end
 
 
 
 # TODO: is this the proper way?
-display(A::AnnotatedArray) = show(STDOUT,A)
+display(A::AnnotatedArray) = show(stdout,A)
 
 
 
