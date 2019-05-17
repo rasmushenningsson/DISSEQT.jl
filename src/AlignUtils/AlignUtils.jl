@@ -8,6 +8,7 @@ using JLD
 using Levenshtein
 using ..BamReader
 using ..DISSEQT
+using ..SynapseTools
 
 
 export

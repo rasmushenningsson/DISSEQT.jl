@@ -28,7 +28,7 @@ end
 # TODO: fix using redirect_stdout/redirect_stderr ???
 
 
-struct DiskBuffer
+mutable struct DiskBuffer
 	filename::String
 	stream#::IOStream
 end
@@ -38,7 +38,7 @@ openbuf(db::DiskBuffer) = db.stream = open(db.filename, "w")
 function closebuf(db::DiskBuffer)::String
 	db.stream == nothing && return ""
 	close(db.stream)
-	str = readstring(db.filename)
+	str = read(db.filename, String)
 	rm(db.filename) # delete file
 	str
 end

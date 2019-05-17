@@ -58,9 +58,9 @@ function extractcmdversion(cmd::Cmd, readErr::Bool)
 	# NB: bwa writes info to stderr
 	try
 		if readErr
-			run(pipeline(cmd, stderr=openbuf(out)))
+			run(pipeline(ignorestatus(cmd), stderr=openbuf(out)))
 		else
-			run(pipeline(cmd, stdout=openbuf(out)))
+			run(pipeline(ignorestatus(cmd), stdout=openbuf(out)))
 		end
 	catch
 	end
