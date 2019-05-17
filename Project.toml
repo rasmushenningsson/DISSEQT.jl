@@ -1,7 +1,7 @@
 name = "DISSEQT"
 uuid = "a0845bb0-78c5-11e9-32f4-57c227d4630e"
 authors = ["Rasmus Henningsson <rasmus.henningsson@gmail.com>"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 BioSequences = "7e6ae17a-c86d-528c-b3b9-7f778a29fe59"
