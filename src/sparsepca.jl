@@ -254,7 +254,7 @@ function sparsepcal1(X, k::Integer, c1; backtrack=true, tol=1e-6, maxIters=1000)
     i=1
     while i<=k
         U[:,i], S[i], V[:,i], converged = pcarank1l1_orthogonal(X,c1,V[:,1:i-1],v0,tol,maxIters)
-        converged || warn("sparsepca component $i did not converge")
+        converged || @warn("sparsepca component $i did not converge")
 
         if S[i]<0 || any(abs(V[:,i]'V[:,1:i-1]) .> 1e-6) # In this case, we are not finding any more components. I.e. the rank(XOrig)<i.
             U[:,i], S[i], V[:,i] = .0, .0, .0
