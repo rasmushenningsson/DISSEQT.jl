@@ -5,6 +5,7 @@ module DISSEQT
 include("AnnotatedArrays/AnnotatedArrays.jl")
 include("BamReader/BamReader.jl")
 include("Kruskal/Kruskal.jl")
+include("AlignUtils/AlignUtils.jl")
 include("SynapseTools/SynapseTools.jl")
 include("Plots/Plots.jl")
 
