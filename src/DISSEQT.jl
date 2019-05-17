@@ -2,8 +2,7 @@ module DISSEQT
 
 using Pkg
 
-haskey(Pkg.installed(),"AnnotatedArrays") || warn("Module AnnotatedArrays not installed. Please refer to DISSEQT installation instructions at https://github.com/rasmushenningsson/DISSEQT.jl")
-haskey(Pkg.installed(),"BamReader") || warn("Module BamReader not installed. Please refer to DISSEQT installation instructions at https://github.com/rasmushenningsson/DISSEQT.jl")
+haskey(Pkg.installed(),"BamReader") || @warn("Module BamReader not installed. Please refer to DISSEQT installation instructions at https://github.com/rasmushenningsson/DISSEQT.jl")
 
 using JLD
 using StatsBase # for sample
@@ -11,7 +10,7 @@ using DataStructures
 using DataFrames
 using BioSequences
 
-using AnnotatedArrays
+using .AnnotatedArrays
 using BamReader
 
 
