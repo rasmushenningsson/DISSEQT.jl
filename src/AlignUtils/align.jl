@@ -294,7 +294,7 @@ function align_sample!(sample::Sample, adapters::String,
 
 	# copy consensus
 	sample.consensus = joinpath(outFolder, sample.name * "_consensus.fasta")
-	cp(currReference,sample.consensus,remove_destination=true)
+	cp(currReference,sample.consensus,force=true)
 
 
 	sample.bam = joinpath(outFolder, "$(sample.name).bam")
