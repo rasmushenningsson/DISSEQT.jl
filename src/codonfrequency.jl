@@ -40,7 +40,7 @@ function kkt(x,rcc,counts)
 	i = argmax(x)
 	ν = -g[i]
 
-	λ = max.( (g+ν).*(x.==0), 0 )
+	λ = max.( (g.+ν).*(x.==0), 0 )
 	g,λ,ν
 end
 
@@ -55,7 +55,7 @@ function kktprint(x,rcc,counts)
 	println("λ: ", λ')
 	println("minimum(λ) = ", minimum(λ), " (i=", argmin(λ), ")")
 	println("λᵢxᵢ: ", (λ.*x)')
-	println("(∇f + ∑ᵢλᵢ∇fᵢ + ν∇h)/||∇f||₂: ", (g-λ+ν)'/norm(g))
+	println("(∇f + ∑ᵢλᵢ∇fᵢ + ν∇h)/||∇f||₂: ", (g.-λ.+ν)'/norm(g))
 	g,λ,ν
 end
 
@@ -108,7 +108,7 @@ function gradientdescentsolve(x0,rcc,counts; maxIter::Integer=maxIter)
 
 				# find the maximum step length we can take (i.e. stepping further would make some xᵢ<0)
 				t = x./cg # t value for hitting xᵢ=0 for all i
-				t[cg.<=0] = Inf # moving away from zero
+				t[cg.<=0] .= Inf # moving away from zero
 				maxStep = minimum(t)
 
 				# println("maxStep: ", maxStep)
@@ -116,11 +116,11 @@ function gradientdescentsolve(x0,rcc,counts; maxIter::Integer=maxIter)
 				# if taking the maximum size step lowers the objective
 				# then solve the more constrained problem first
 				xn = x - maxStep*cg
-				xn[xn.<=0] = 0 # force to zero
+				xn[xn.<=0] = .0 # force to zero
 				objn = objective(xn,rcc,counts)
 				if objn < obj
 					# setup more constrained problem
-					xn[xn.<=1e-12] = 0 # a little bit more forcefull forcing to zero
+					xn[xn.<=1e-12] .= 0 # a little bit more forcefull forcing to zero
 					x,rcc,active = constrainproblem(xn,rcc,active)
 					obj = objective(x,rcc,counts) # value of objective function is different depending on the number of active variables
 					# println("Maxstep possible: constraining problem - ", count(active), " variables.")
@@ -167,7 +167,7 @@ function gradientdescentsolve(x0,rcc,counts; maxIter::Integer=maxIter)
 		g,λ,ν = kkt(x,rcc,counts)
 		# g,λ,ν = kktprint(x,rcc,counts)
 
-		scaledGradCond = abs.(g-λ+ν) / norm(g) # move this to kkt?
+		scaledGradCond = abs.(g.-λ.+ν) / norm(g) # move this to kkt?
 
 		# move test to kkt!
 		if all(scaledGradCond.<1e-6) && all(λ.>=-1e-6)
@@ -278,12 +278,12 @@ function newtonsolve(x0,rcc,counts; regularization=1e-6, maxIter::Integer=10000)
 
 				dir = dir*maxT
 				xn = x - dir
-				xn[xn.<0] = 0 # force to zero
+				xn[xn.<0] .= 0 # force to zero
 
 				objn = objective(xn,rcc,counts) # is the objective better at the border?
 				if objn < obj
 					# setup more constrained problem
-					xn[xn.<=1e-12] = 0 # a little bit more forcefull forcing to zero
+					xn[xn.<=1e-12] .= 0 # a little bit more forcefull forcing to zero
 					x,rcc,active = constrainproblem(xn,rcc,active)
 					obj = objective(x,rcc,counts) # value of objective function is different depending on the number of active variables
 					# println("Maxstep possible: constraining problem - ", count(active), " variables.")
@@ -339,7 +339,7 @@ function newtonsolve(x0,rcc,counts; regularization=1e-6, maxIter::Integer=10000)
 		g,λ,ν = kkt(x,rcc,counts)
 		# g,λ,ν = kktprint(x,rcc,counts)
 
-		scaledGradCond = abs.(g-λ+ν) / norm(g) # move this to kkt?
+		scaledGradCond = abs.(g.-λ.+ν) / norm(g) # move this to kkt?
 
 		# move test to kkt!
 		if all(scaledGradCond.<1e-6) && all(λ.>=-1e-6)
