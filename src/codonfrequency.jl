@@ -161,7 +161,7 @@ function gradientdescentsolve(x0,rcc,counts; maxIter::Integer=maxIter)
 		x = zeros(length(active))
 		x[active] = xC
 		rcc = rccFull
-		active = trues(x)
+		active = trues(size(x))
 
 		# check KKT conditions (for full problem)
 		g,λ,ν = kkt(x,rcc,counts)
@@ -230,8 +230,8 @@ function newtonsolve(x0,rcc,counts; regularization=1e-6, maxIter::Integer=10000)
 			g = grad(x,rcc,counts)
 	 		M = length(x)
 	 		H = zeros(M+1,M+1)
-	 		H[1:M,M+1] = 1
-	 		H[M+1,1:M] = 1
+			H[1:M,M+1] .= 1
+			H[M+1,1:M] .= 1
 	 		hessian!(view(H,1:M,1:M),x,rcc,counts)
 	 		# println("||H||=", vecnorm(H), ", cond(H)=", cond(H), ", ||H||₂=", norm(H))
 	 		
@@ -333,7 +333,7 @@ function newtonsolve(x0,rcc,counts; regularization=1e-6, maxIter::Integer=10000)
 		x = zeros(length(active))
 		x[active] = xC
 		rcc = rccFull
-		active = trues(x)
+		active = trues(size(x))
 
 		# check KKT conditions (for full problem)
 		g,λ,ν = kkt(x,rcc,counts)
