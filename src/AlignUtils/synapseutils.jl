@@ -79,7 +79,7 @@ function uploadswarms(syn, destID::AbstractString, runName::AbstractString,
                       samplePaths::Vector{String},
                       sampleNames::Vector{String},
                       strands::Vector{Symbol},
-                      outFormat)
+                      outFormat=:JLD)
 	typeof(outFormat)<:Array || (outFormat=[outFormat]) # ensure it is a vector
 
 	# give error message if the .bam files are not already in Synapse
