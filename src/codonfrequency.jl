@@ -75,7 +75,7 @@ function gradientdescentsolve(x0,rcc,counts; maxIter::Integer=maxIter)
 	rccFull = rcc
 
 	x = x0
-	active = trues(x)
+	active = trues(size(x))
 	x,rcc,active = constrainproblem(x,rcc,active, x.>=0)
 
 	obj = objective(x,rcc,counts)
@@ -86,7 +86,7 @@ function gradientdescentsolve(x0,rcc,counts; maxIter::Integer=maxIter)
 	while true
 		# sleep(0.1)
 
-		if nbrIter<maxIter && countnz(active)>1 # move directly to KKT check if there is only one nonzero variable (no step is possible)
+		if nbrIter<maxIter && count(active)>1 # move directly to KKT check if there is only one nonzero variable (no step is possible)
 			nbrIter += 1
 
 			# move active xᵢ that are zero and have a nonnegative gradient to inactive
@@ -98,7 +98,7 @@ function gradientdescentsolve(x0,rcc,counts; maxIter::Integer=maxIter)
 			if any(cgmask)
 				x,rcc,active = constrainproblem(x,rcc,active,.~cgmask)
 				obj = objective(x,rcc,counts)
-				# println("Positive constrained gradient: constraining problem - ", countnz(active), " variables.")
+				# println("Positive constrained gradient: constraining problem - ", count(active), " variables.")
 				continue
 			end
 
@@ -123,7 +123,7 @@ function gradientdescentsolve(x0,rcc,counts; maxIter::Integer=maxIter)
 					xn[xn.<=1e-12] = 0 # a little bit more forcefull forcing to zero
 					x,rcc,active = constrainproblem(xn,rcc,active)
 					obj = objective(x,rcc,counts) # value of objective function is different depending on the number of active variables
-					# println("Maxstep possible: constraining problem - ", countnz(active), " variables.")
+					# println("Maxstep possible: constraining problem - ", count(active), " variables.")
 					continue
 				end
 				
@@ -190,7 +190,7 @@ function gradientdescentsolve(x0,rcc,counts; maxIter::Integer=maxIter)
 
 		# TEST: relax only variables with a bad (g-λ+ν)/||g||
 		newActive = (x.>0) .| (scaledGradCond.>=1e-6)
-		# println("Relaxing ", countnz(newActive.!=(x.>0)), " variable(s). Objective: ", obj)
+		# println("Relaxing ", count(newActive.!=(x.>0)), " variable(s). Objective: ", obj)
 		x,rcc,active = constrainproblem(x,rcc,active, newActive)
 		obj = objective(x,rcc,counts)
 
@@ -213,7 +213,7 @@ function newtonsolve(x0,rcc,counts; regularization=1e-6, maxIter::Integer=10000)
 	rccFull = rcc
 
 	x = x0
-	active = trues(x)
+	active = trues(size(x))
 	x,rcc,active = constrainproblem(x,rcc,active, x.>=0)
 
 	obj = objective(x,rcc,counts)
@@ -223,7 +223,7 @@ function newtonsolve(x0,rcc,counts; regularization=1e-6, maxIter::Integer=10000)
 	converged = false
 	while true
 
-		if nbrIter<maxIter && countnz(active)>1 # move directly to KKT check if there is only one nonzero variable (no step is possible)
+		if nbrIter<maxIter && count(active)>1 # move directly to KKT check if there is only one nonzero variable (no step is possible)
 			nbrIter += 1
 			
 	 		# setup "extended" hessian matrix [H 1; 1 0]
@@ -258,7 +258,7 @@ function newtonsolve(x0,rcc,counts; regularization=1e-6, maxIter::Integer=10000)
 			if any(dirmask)
 				x,rcc,active = constrainproblem(x,rcc,active,.~dirmask)
 				obj = objective(x,rcc,counts)
-				# println("Trying to move outside boundary: constraining problem - ", countnz(active), " variables.")
+				# println("Trying to move outside boundary: constraining problem - ", count(active), " variables.")
 				continue
 			end
 
@@ -286,7 +286,7 @@ function newtonsolve(x0,rcc,counts; regularization=1e-6, maxIter::Integer=10000)
 					xn[xn.<=1e-12] = 0 # a little bit more forcefull forcing to zero
 					x,rcc,active = constrainproblem(xn,rcc,active)
 					obj = objective(x,rcc,counts) # value of objective function is different depending on the number of active variables
-					# println("Maxstep possible: constraining problem - ", countnz(active), " variables.")
+					# println("Maxstep possible: constraining problem - ", count(active), " variables.")
 					continue
 				end
 			end
@@ -375,7 +375,7 @@ function newtonsolve(x0,rcc,counts; regularization=1e-6, maxIter::Integer=10000)
 
 		# TEST: relax only variables with a bad (g-λ+ν)/||g||
 		newActive = (x.>0) .| (scaledGradCond.>=1e-6)
-		# println("Relaxing ", countnz(newActive.!=(x.>0)), " variable(s). Objective: ", obj)
+		# println("Relaxing ", count(newActive.!=(x.>0)), " variable(s). Objective: ", obj)
 		x,rcc,active = constrainproblem(x,rcc,active, newActive)
 		obj = objective(x,rcc,counts)
 

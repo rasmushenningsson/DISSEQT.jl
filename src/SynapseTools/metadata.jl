@@ -59,17 +59,17 @@ filtermetadata(metadata::DataFrame, filter::Symbol) = filter in names(metadata) 
 function filtermetadata(metadata::DataFrame, filter::Pair{Symbol,T}) where {T<:AbstractArray}
     filter.first in names(metadata) || return DataFrame()
     mask = map!(x->!ismissing(x) && x in filter.second, falses(size(metadata,1)), metadata[filter.first])
-    countnz(mask)==0 ? DataFrame() : metadata[mask,:]
+    count(mask)==0 ? DataFrame() : metadata[mask,:]
 end
 function filtermetadata(metadata::DataFrame, filter::Pair{Symbol,T}) where {T}
     filter.first in names(metadata) || return DataFrame()
     mask = .~ismissing.(metadata[filter.first]) .& (metadata[filter.first] .== filter.second)
-    countnz(mask)==0 ? DataFrame() : metadata[mask,:]
+    count(mask)==0 ? DataFrame() : metadata[mask,:]
 end
 function filtermetadata(metadata::DataFrame, filter::Pair{Symbol,Function}) 
     filter.first in names(metadata) || return DataFrame()
     mask = map!(filter.second, falses(size(metadata,1)), metadata[filter.first])
-    countnz(mask)==0 ? DataFrame() : metadata[mask,:]
+    count(mask)==0 ? DataFrame() : metadata[mask,:]
 end
 function filtermetadata(metadata::DataFrame, filter::Function) 
     N = size(metadata,1)
@@ -77,7 +77,7 @@ function filtermetadata(metadata::DataFrame, filter::Function)
     for i=1:N
         mask[i] = filter(metadata[i,:])
     end
-    countnz(mask)==0 ? DataFrame() : metadata[mask,:]
+    count(mask)==0 ? DataFrame() : metadata[mask,:]
 end
 
 function filtermetadata(metadata, args...)

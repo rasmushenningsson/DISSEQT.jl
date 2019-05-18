@@ -91,7 +91,7 @@ function isomapmatrix(D::AbstractMatrix{T}, nearestNeighbours::Integer, distance
 
         mask = D[v,:] .<= distanceThreshold
         
-        if countnz(mask)<nearestNeighbours # not enough neighbours within radius? Include at least nearestNeighbour edges.
+        if count(mask)<nearestNeighbours # not enough neighbours within radius? Include at least nearestNeighbour edges.
             mask = D[v,:] .<= sort(D[v,:][:])[nearestNeighbours] # this includes ties
         end
 

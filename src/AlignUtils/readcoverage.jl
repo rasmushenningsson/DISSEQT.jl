@@ -111,7 +111,7 @@ function coverageplots(syn, alignmentFolder, runName, doUpload, scriptFilename;
     # split samples by reference sequence
     for reference in unique(references)
         mask = references.==reference
-        nbrSamples = countnz(mask)
+        nbrSamples = count(mask)
         println(log, "Processing $nbrSamples samples for reference \"$reference\".")
         filesCreated, segments = _coverageplots(localPaths[mask], sampleNames[mask], outputFolder, "readcoverage_$(runName)_$reference", outFormats, log)
         for (f,s) in zip(filesCreated,segments)
