@@ -44,7 +44,7 @@ function referencefromlog(syn, logFile::AbstractString, sampleNames::AbstractArr
 
     references = Vector{String}(undef,length(sampleNames))
     for (i,name) in enumerate(sampleNames)
-        ind = findfirst(logSamples, name)
+        ind = findfirst(isequal(name), logSamples)
         references[i] = ind!=0 ? logRefs[ind] : ""
     end
     references

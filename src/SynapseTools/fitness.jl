@@ -52,7 +52,7 @@ function appendfitness!(metadata::DataFrame, fitnessTable::DataFrame; allowInexa
                    .~used
 
             ind = findfirst(mask) # if there are multiple matches, use the first one and leave others to match other samples
-            ind==0 && continue # no match
+            ind==nothing && continue # no match
 
             metadata[i,:Fitness]   = fitnessTable[ind,:Fitness]
             metadata[i,:FitnessID] = fitnessTable[ind,:FitnessID]

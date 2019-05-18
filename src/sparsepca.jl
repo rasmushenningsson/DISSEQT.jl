@@ -263,7 +263,7 @@ function sparsepcal1(X, k::Integer, c1; backtrack=true, tol=1e-6, maxIters=1000)
 
         if backtrack && i>1 && S[i]-S[i-1]>tol # Backtrack if we found a component with higher S[i] than the previous one.
             v0 = V[:,i] # Use this optimum as a starting point for the search on the previous matrix. The orthogonality of samples (V) guarantees that the starting point will have the same S value, i.e. we will find a better local optima.
-            i = findfirst(S[i]-S.>tol) - 1 # How far do we need to backtrack?
+            i = something(findfirst(S[i]-S.>tol),0) - 1 # How far do we need to backtrack?
             X = XOrig - U[:,1:i]*(diagm(S[1:i])*V[:,1:i]') # Restore matrix state s.t. only the i first components have been removed.
         else
             X = X - U[:,i]*(S[i]*V[:,i]') # Remove this component to be able to find next component.

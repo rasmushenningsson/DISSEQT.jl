@@ -64,7 +64,7 @@ header(f::BamFile) = f.text
 sequences(f::BamFile) = f.refs
 sequence_name(f::BamFile, refID::Integer) = refID<0 ? "*" : f.refs[refID+1][1]
 
-refID(f::BamFile, name::AbstractString) = findfirst(x->x[1]==name, sequences(f))-1
+refID(f::BamFile, name::AbstractString) = something(findfirst(x->x[1]==name, sequences(f)),0)-1
 
 hasindex(f::BamFile) = !isempty(f.index)
 index(f::BamFile) = f.index

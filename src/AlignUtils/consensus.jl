@@ -61,7 +61,7 @@ function reference_sanity_check(sample::Sample,
 	end
 
 	i = argmin(d)
-	j = findfirst(referenceNames,sample.referenceName)
+	j = findfirst(isequal(sample.referenceName),referenceNames)
 
 	if d[j] > d[i]
 		ri = splitdir(referenceNames[i])[2]

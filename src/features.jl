@@ -8,13 +8,13 @@ end
 
 
 function featurepositions(featureTable::DataFrame, featureName)
-    row = findfirst(featureTable[:Feature], featureName )
+    row = findfirst(isequal(featureName), featureTable[:Feature])
     @assert row!=0
     _featurepositions(featureTable[row,:Start], featureTable[row,:End])
 end
 
 function featuresegment(featureTable::DataFrame, featureName)
-    row = findfirst(featureTable[:Feature], featureName )
+    row = findfirst(isequal(featureName), featureTable[:Feature])
     @assert row!=0
     featureTable[row,:Segment]
 end
@@ -31,7 +31,7 @@ function featureat(featureTable::DataFrame, position::Integer)
 end
 
 function codonposition(featureTable::DataFrame, featureName, position::Integer)
-    i = findfirst(featureTable[:Feature],featureName)
+    i = findfirst(isequal(featureName), featureTable[:Feature])
     @assert i>0 "Feature $featureName not found in table"
     @assert featureTable[i,:Start]<=position<=featureTable[i,:End]
     p = position-featureTable[i,:Start]
