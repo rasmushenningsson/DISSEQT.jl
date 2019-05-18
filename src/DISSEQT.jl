@@ -9,6 +9,9 @@ include("SynapseTools/SynapseTools.jl")
 include("AlignUtils/AlignUtils.jl")
 include("Plots/Plots.jl")
 
+# temporary submodule
+include("Levenshtein/Levenshtein.jl")
+
 
 
 using JLD

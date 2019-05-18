@@ -5,7 +5,8 @@ using DataFrames
 using Gadfly
 using Colors
 using JLD
-using Levenshtein
+# using Levenshtein
+using ..Levenshtein # TODO: use the above line when the Levenshtein package is fixed.
 using ..BamReader
 using ..DISSEQT
 using ..SynapseTools
