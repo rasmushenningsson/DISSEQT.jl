@@ -1,5 +1,7 @@
 module DISSEQT
 
+# temporary submodule
+include("Levenshtein/Levenshtein.jl")
 
 # submodules
 include("AnnotatedArrays/AnnotatedArrays.jl")
@@ -8,10 +10,6 @@ include("Kruskal/Kruskal.jl")
 include("SynapseTools/SynapseTools.jl")
 include("AlignUtils/AlignUtils.jl")
 include("Plots/Plots.jl")
-
-# temporary submodule
-include("Levenshtein/Levenshtein.jl")
-
 
 
 using JLD
