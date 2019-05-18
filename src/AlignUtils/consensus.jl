@@ -60,7 +60,7 @@ function reference_sanity_check(sample::Sample,
 		end
 	end
 
-	i = indmin(d)
+	i = argmin(d)
 	j = findfirst(referenceNames,sample.referenceName)
 
 	if d[j] > d[i]

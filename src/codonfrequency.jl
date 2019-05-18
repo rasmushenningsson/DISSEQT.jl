@@ -53,7 +53,7 @@ function kktprint(x,rcc,counts)
 	println("ν=$ν")
 
 	println("λ: ", λ')
-	println("minimum(λ) = ", minimum(λ), " (i=", indmin(λ), ")")
+	println("minimum(λ) = ", minimum(λ), " (i=", argmin(λ), ")")
 	println("λᵢxᵢ: ", (λ.*x)')
 	println("(∇f + ∑ᵢλᵢ∇fᵢ + ν∇h)/||∇f||₂: ", (g-λ+ν)'/norm(g))
 	g,λ,ν

@@ -105,7 +105,7 @@ function landscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Float64}, σVa
     end
 
     meanErrors = mean(allErrors,2)[:]
-    ind = indmin(meanErrors)
+    ind = argmin(meanErrors)
     σValues[ind], meanErrors[ind], meanErrors
 end
 
@@ -180,7 +180,7 @@ function leaveoneoutlandscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Flo
     end
 
     meanErrors = squeeze(mean(allErrors,3),3)
-    ind = mapslices(indmin, meanErrors, 2)[:]
+    ind = mapslices(argmin, meanErrors, 2)[:]
     σValues[ind], meanErrors[sub2ind(size(meanErrors), 1:length(ind), ind)], meanErrors
 end
 
@@ -207,7 +207,7 @@ NearestNeighborModel(X::AbstractMatrix{Symbol},fitness) = NearestNeighborModel{S
 
 # euclidean distance
 _predictfitnessnn(D2::Matrix{Float64}, fitness::Vector{Float64}) =
-    Float64[ fitness[indmin(D2[i,:])] for i=1:size(D2,1) ] # find nearest neighbour (expect no ties for Float64)
+    Float64[ fitness[argmin(D2[i,:])] for i=1:size(D2,1) ] # find nearest neighbour (expect no ties for Float64)
 predictfitness(model::NearestNeighborModel{Float64}, X::Matrix{Float64}) = _predictfitnessnn(squareddistances(X,model.X), model.fitness)
 
 # edit distance

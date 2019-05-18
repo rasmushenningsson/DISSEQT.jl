@@ -26,7 +26,7 @@ end
 function featureat(featureTable::DataFrame, position::Integer)
     ind = find(featureTable[:Start].<=position.<=featureTable[:End]) # matching features
     isempty(ind) && return ""
-    i = indmin( featureTable[ind,:End] - featureTable[ind,:Start] )
+    i = argmin( featureTable[ind,:End] - featureTable[ind,:Start] )
     featureTable[ind[i],:Feature] # name of shortest feature
 end
 
