@@ -106,8 +106,8 @@ function uploadswarms(syn, destID::AbstractString, runName::AbstractString,
 	swarmRunFolderID = createchildfolder(syn, swarmFolderID, runName)
 
 
-	localStrandFolders = Vector{String}(length(strands))
-	strandFolderIDs    = Vector{String}(length(strands))
+	localStrandFolders = Vector{String}(undef, length(strands))
+	strandFolderIDs    = Vector{String}(undef, length(strands))
 	for (i,strand) in enumerate(strands)
         if strand==:both
         	localStrandFolders[i] = "MutantSwarms"
