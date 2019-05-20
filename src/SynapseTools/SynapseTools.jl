@@ -3,6 +3,7 @@ module SynapseTools
 
 using SynapseClient
 using ..DISSEQT
+using Statistics
 using DataFrames
 using Missings
 using CSV

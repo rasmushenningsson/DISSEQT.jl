@@ -1,5 +1,6 @@
 module Kruskal
 
+using Statistics
 using Optim
 
 export kruskalmds
@@ -149,8 +150,8 @@ function updatelocation(D::AbstractVector{T}, X0::AbstractMatrix{T}, tol) where 
 
 
     # Since the optimum is preserved when X is uniformly scaled, normalize scaling to keep numerical stability
-    X = X .- mean(X,2) # center X (doesn't change stress)
-    X = X / sqrt(mean(sum(X.^2,1),2)[1]) # scale so that RMS distance to origin is equal to 1
+    X = X .- mean(X;dims=2) # center X (doesn't change stress)
+    X = X / sqrt(mean(sum(X.^2;dims=1);dims=2)[1]) # scale so that RMS distance to origin is equal to 1
 
     X, Optim.minimum(res)
 end
@@ -279,8 +280,8 @@ function kruskalmds(D::AbstractMatrix{T}, p::Integer, X0=convert(Matrix{T},randn
     tieGroups = duplicateranges(dist[perm])
 
 
-    X = X0 .- mean(X0,2) # center X (doesn't change stress)
-    X = X / sqrt(mean(sum(X.^2,1),2)[1]) # scale so that RMS distance to origin is equal to 1 (doesn't change stress, if the monotone function is updated accordingly)
+    X = X0 .- mean(X0;dims=2) # center X (doesn't change stress)
+    X = X / sqrt(mean(sum(X.^2;dims=1);dims=2)[1]) # scale so that RMS distance to origin is equal to 1 (doesn't change stress, if the monotone function is updated accordingly)
 
 
     S = Inf

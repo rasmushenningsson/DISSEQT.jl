@@ -74,7 +74,7 @@ _fitnessresidualssquared(D2::Matrix{Float64}, fitnessTrain::Vector{Float64}, fit
 _fitnesserrortransform(x) = x       # mean squared error
 #_fitnesserrortransform(x) = sqrt(x) # RMS error
 
-_fitnesserror(residualsSquared::Array{Float64}, args...) = _fitnesserrortransform(mean(residualsSquared, args...))
+_fitnesserror(residualsSquared::Array{Float64}, args...; kwargs...) = _fitnesserrortransform(mean(residualsSquared, args...; kwargs...))
 
 _fitnesserror(D2::Matrix{Float64}, fitnessTrain::Vector{Float64}, fitnessTest::Vector{Float64}, σ::Float64) =
     _fitnesserror(_fitnessresidualssquared(D2,fitnessTrain,fitnessTest,σ))
@@ -104,7 +104,7 @@ function landscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Float64}, σVa
         allErrors[:,i] = map(x->_fitnesserror(D2TestTrain,fitnessTrain,fitnessTest,x), σValues)
     end
 
-    meanErrors = mean(allErrors,2)[:]
+    meanErrors = mean(allErrors,dims=2)[:]
     ind = argmin(meanErrors)
     σValues[ind], meanErrors[ind], meanErrors
 end
@@ -164,8 +164,8 @@ function leaveoneoutlandscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Flo
             F = A./B # nbrTest x nbrTrain - Fᵤᵥ = predicted value of test sample i, with training sample j removed
             residuals = (F .- fitnessTest).^2 # nbrTest x nbrTrain - squared residual for test sample i, with training sample j removed
 
-            #allErrors[.~testMask, j, i] = dropdims(mean(residuals,1); dims=1) # nbrTrain - mean squared error with training sample j removed
-            allErrors[.~testMask, j, i] = dropdims(_fitnesserror(residuals,1); dims=1) # nbrTrain - mean squared error with training sample j removed
+            #allErrors[.~testMask, j, i] = dropdims(mean(residuals;dims=1); dims=1) # nbrTrain - mean squared error with training sample j removed
+            allErrors[.~testMask, j, i] = dropdims(_fitnesserror(residuals;dims=1); dims=1) # nbrTrain - mean squared error with training sample j removed
         end
         
         # Case B, samples part of the Test set (different set of residuals depending on which sample we leave out)

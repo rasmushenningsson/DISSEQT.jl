@@ -43,7 +43,7 @@ function _partitionmatrices(partitionInd::AbstractVector{Int}, referenceCodons::
             tMask .&= tMask .& (q[1].<=fs) .& (fs.<=q[2])
         end
         # compute trimmed means
-        Y[:,s] = mean(f[:,tMask,s], 2)
+        Y[:,s] = mean(f[:,tMask,s]; dims=2)
     end
 
 
