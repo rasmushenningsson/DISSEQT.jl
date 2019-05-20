@@ -90,7 +90,7 @@ end
 
 
 function _loadmetadata(syn, fileID) 
-    T = readtable(localpath(syn, fileID))
+    T = CSV.read(localpath(syn, fileID))
     T[:MetadataID] = fileID # make an extra column with a reference to the metadata file!
     T
 end

@@ -5,6 +5,7 @@ using SynapseClient
 using ..DISSEQT
 using DataFrames
 using Missings
+using CSV
 
 import SynapseClient: AbstractEntity, Entity, File, Folder, Project, Activity
 
