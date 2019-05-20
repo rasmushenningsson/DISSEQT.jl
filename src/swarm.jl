@@ -31,7 +31,7 @@ function loadswarm(id::AbstractString, freqPath::AbstractString, consensusPath::
 		# consensus
 		# annotations from codon frequency computations
 
-	data = cat(4,cf...)
+	data = cat(cf...; dims=4)
 
 
 	A = AnnotatedArray(data)
@@ -57,7 +57,7 @@ function loadswarm(id::AbstractString, freqPath::AbstractString, consensusPath::
 	
 	# nucleotide position
 	pos = map( x->reshapesingleton(x,4), pos )
-	pos = cat(4,pos...)
+	pos = cat(pos...; dims=4)
 	annotate!(A,:position,pos)
 
 	if length(segmentInfo)==1
@@ -72,7 +72,7 @@ function loadswarm(id::AbstractString, freqPath::AbstractString, consensusPath::
 
 	# coverage
 	cov = map( x->reshapesingleton(x,4), cov )
-	cov = cat(4,cov...)
+	cov = cat(cov...; dims=4)
 	annotate!(A,:coverage,cov)
 
 
@@ -108,7 +108,7 @@ function loadswarm(ids::AbstractArray, freqPaths::AbstractArray, consensusPaths:
 	@assert length(ids)==length(freqPaths)
 	@assert isempty(consensusPaths) || length(freqPaths)==length(consensusPaths)
 	isempty(consensusPaths) && (consensusPaths = repmat([""],length(freqPaths)))
-	cat(5, map((id,f,c)->loadswarm(id,f,c),ids,freqPaths,consensusPaths)...)
+	cat(map((id,f,c)->loadswarm(id,f,c),ids,freqPaths,consensusPaths)...; dims=5)
 end
 
 

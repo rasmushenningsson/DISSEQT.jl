@@ -80,9 +80,9 @@ view(A::SingletonArray, I::Union{Int64, AbstractVector, Colon}...) = viewimpl(A,
 copy(A::SingletonArray) = SingletonArray(copy(A.array))
 
 
-function cat(dim::Int,A::SingletonArray,A2::SingletonArray...)
+function cat(A::SingletonArray,A2::SingletonArray...; dims::Int)
 	A = (A,A2...)
-	SingletonArray(cat(dim, map(x->convert(Array,x),A)...))
+	SingletonArray(cat(map(x->convert(Array,x),A)...; dims=dims))
 end
 
 
@@ -200,13 +200,13 @@ copy(A::AnnotatedArray) = AnnotatedArray(copy(A.array),copy(A.annotations))
 
 # TODO: implement cat that works in multiple dimensions
 #function cat(dim::Int, A::AnnotatedArray...)
-function cat(dim::Int, A::AnnotatedArray, A2::AnnotatedArray...)
+function cat(A::AnnotatedArray, A2::AnnotatedArray...; dims::Int)
 	A = (A,A2...) 
 
 	# check that the arrays have compatible sizes
 	nd = maximum(map(ndims,A))
 	for i=1:nd
-		i==dim && continue
+		i==dims && continue
 		sz = [map( x->size(x,i), A )...] # all sizes along this dimension
 
 		if any(sz.!=sz[1]) 
@@ -215,7 +215,7 @@ function cat(dim::Int, A::AnnotatedArray, A2::AnnotatedArray...)
 		end
 	end
 
-	B = AnnotatedArray(cat(dim,map(x->convert(Array,x),A)...))
+	B = AnnotatedArray(cat(map(x->convert(Array,x),A)...; dims=dims))
 
 	
 	# handle annotations
@@ -230,7 +230,7 @@ function cat(dim::Int, A::AnnotatedArray, A2::AnnotatedArray...)
 		if all( x->isequal(x,annots[1]), annots )
 			# all annotations are equal
 
-			if size(annots[1],dim) == 1
+			if size(annots[1],dims) == 1
 				# just keep annotation
 				annotate!(B, name, copy(annots[1])) # copy is expected when concatenating
 				continue
@@ -239,7 +239,7 @@ function cat(dim::Int, A::AnnotatedArray, A2::AnnotatedArray...)
 
 		# some differences between the annotations or we are concatenating along non-singleton dimension
 		# TODO: handle errors better
-		a = cat(dim, annots...)
+		a = cat(annots...; dims=dims)
 		annotate!(B,name,a)
 	end
 	
@@ -247,8 +247,8 @@ function cat(dim::Int, A::AnnotatedArray, A2::AnnotatedArray...)
 end
 
 
-vcat(A::AnnotatedArray...) = cat(1,A...)
-hcat(A::AnnotatedArray...) = cat(2,A...)
+vcat(A::AnnotatedArray...) = cat(A...; dims=1)
+hcat(A::AnnotatedArray...) = cat(A...; dims=2)
 
 
 

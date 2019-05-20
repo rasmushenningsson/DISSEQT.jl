@@ -39,7 +39,7 @@ end
 
 
 function seq2codons(reference::AbstractString)
-    Symbol[reference[i:i+2] for i in 1:length(reference)-2]
+    Symbol[Symbol(reference[i:i+2]) for i in 1:length(reference)-2]
 end
 seq2codons(reference::Tuple{S,T}) where {S<:AbstractString,T<:AbstractString} = (reference[1], seq2codons(reference[2]))
 seq2codons(references::AbstractArray) = map(seq2codons, references)
