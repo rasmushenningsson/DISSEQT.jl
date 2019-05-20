@@ -33,7 +33,7 @@ function rightsingularvector(X)
     K = Symmetric(X'X);
     N = size(K,1);
     _,v=eig(K,N:N);
-    squeeze(v,2)
+    dropdims(v; dims=2)
 end
 
 

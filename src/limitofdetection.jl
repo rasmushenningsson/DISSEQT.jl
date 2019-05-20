@@ -87,15 +87,15 @@ function limitofdetection(swarms::AnnotatedArray, swarmsF::AnnotatedArray, swarm
         mask = groupID.==g
         lods[:,:,:,:,i] = _limitofdetection(swarms[:,:,:,:,mask], swarmsF[:,:,:,:,mask], swarmsR[:,:,:,:,mask], threshold, lgLow, lgHigh)
     end
-    lod = squeeze(maximum(lods, 5),5)
+    lod = dropdims(maximum(lods, 5); dims=5)
     lod = AnnotatedArray(lod)
-    annotate!(lod, :segment,   squeeze(swarms[:segment],5))
-    annotate!(lod, :position,  squeeze(swarms[:position],5))
-    annotate!(lod, :n1,        squeeze(swarms[:n1],5))
-    annotate!(lod, :n2,        squeeze(swarms[:n2],5))
-    annotate!(lod, :n3,        squeeze(swarms[:n3],5))
-    annotate!(lod, :aminoacid, squeeze(swarms[:aminoacid],5))
-    annotate!(lod, :codon,     squeeze(swarms[:codon],5))
+    annotate!(lod, :segment,   dropdims(swarms[:segment]; dims=5))
+    annotate!(lod, :position,  dropdims(swarms[:position]; dims=5))
+    annotate!(lod, :n1,        dropdims(swarms[:n1]; dims=5))
+    annotate!(lod, :n2,        dropdims(swarms[:n2]; dims=5))
+    annotate!(lod, :n3,        dropdims(swarms[:n3]; dims=5))
+    annotate!(lod, :aminoacid, dropdims(swarms[:aminoacid]; dims=5))
+    annotate!(lod, :codon,     dropdims(swarms[:codon]; dims=5))
     lod
 end
 

@@ -164,8 +164,8 @@ function leaveoneoutlandscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Flo
             F = A./B # nbrTest x nbrTrain - Fᵤᵥ = predicted value of test sample i, with training sample j removed
             residuals = (F .- fitnessTest).^2 # nbrTest x nbrTrain - squared residual for test sample i, with training sample j removed
 
-            #allErrors[.~testMask, j, i] = squeeze(mean(residuals,1),1) # nbrTrain - mean squared error with training sample j removed
-            allErrors[.~testMask, j, i] = squeeze(_fitnesserror(residuals,1),1) # nbrTrain - mean squared error with training sample j removed
+            #allErrors[.~testMask, j, i] = dropdims(mean(residuals,1); dims=1) # nbrTrain - mean squared error with training sample j removed
+            allErrors[.~testMask, j, i] = dropdims(_fitnesserror(residuals,1); dims=1) # nbrTrain - mean squared error with training sample j removed
         end
         
         # Case B, samples part of the Test set (different set of residuals depending on which sample we leave out)
@@ -179,7 +179,7 @@ function leaveoneoutlandscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Flo
         end
     end
 
-    meanErrors = squeeze(mean(allErrors,3),3)
+    meanErrors = dropdims(mean(allErrors,3); dims=3)
     ind = mapslices(argmin, meanErrors, 2)[:]
     σValues[ind], meanErrors[sub2ind(size(meanErrors), 1:length(ind), ind)], meanErrors
 end
