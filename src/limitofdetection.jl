@@ -36,7 +36,7 @@ function _limitofdetection(freqs::Array{T,4}, freqsF::Array{T,4}, freqsR::Array{
     @assert size(freqs)==size(freqsF)==size(freqsR)==(4,4,4,N)
 
     # group samples by consensus codon
-    consensusInd = map(i->argmax(freqs[:,:,:,i]), 1:N)
+    consensusInd = map(i->argmax(freqs[:,:,:,i][:]), 1:N)
 
     lod = (10.0^lgLow)*ones(T,4,4,4)
 
@@ -87,7 +87,7 @@ function limitofdetection(swarms::AnnotatedArray, swarmsF::AnnotatedArray, swarm
         mask = groupID.==g
         lods[:,:,:,:,i] = _limitofdetection(swarms[:,:,:,:,mask], swarmsF[:,:,:,:,mask], swarmsR[:,:,:,:,mask], threshold, lgLow, lgHigh)
     end
-    lod = dropdims(maximum(lods, 5); dims=5)
+    lod = dropdims(maximum(lods; dims=5); dims=5)
     lod = AnnotatedArray(lod)
     annotate!(lod, :segment,   dropdims(swarms[:segment]; dims=5))
     annotate!(lod, :position,  dropdims(swarms[:position]; dims=5))

@@ -190,7 +190,7 @@ markforupload!(list, uploadFolder::AbstractString, file::AbstractString, depende
 function uploadfiles(syn, uploadFolder::AbstractString, uploads::UploadList, scriptFileName::AbstractString, activityName::AbstractString)
     subFolderIDs = Dict{String,String}() # "path/with/slashes" => id
     for subFolder in unique(map(x->x[1], uploads))
-        subFolderIDs[subFolder] = createchildfolder(syn, uploadFolder, split(subFolder,'/',keep=false)... ) # keep=false handles subFolder="" which specifies the root (uploadFolder)
+        subFolderIDs[subFolder] = createchildfolder(syn, uploadFolder, split(subFolder,'/',keepempty=false)... ) # keep=false handles subFolder="" which specifies the root (uploadFolder)
     end
 
     # upload script file

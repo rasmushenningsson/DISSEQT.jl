@@ -38,10 +38,10 @@ function find_samples(table, namePrefix::String="";
 	for i=1:size(table,1)
 		n = string(namePrefix, table[i,name])
 
-		f1  = convert(Vector{String},split(table[i,fastq],separator,keep=false))
-		f2  = fastq2 != nothing ? convert(Vector{String},split(table[i,fastq2],separator,keep=false)) : String[]
-		f1L = fastqLocal  != nothing ? convert(Vector{String},split(table[i,fastqLocal], separator,keep=false)) : String[]
-		f2L = fastqLocal2 != nothing ? convert(Vector{String},split(table[i,fastqLocal2],separator,keep=false)) : String[]
+		f1  = convert(Vector{String},split(table[i,fastq],separator,keepempty=false))
+		f2  = fastq2 != nothing ? convert(Vector{String},split(table[i,fastq2],separator,keepempty=false)) : String[]
+		f1L = fastqLocal  != nothing ? convert(Vector{String},split(table[i,fastqLocal], separator,keepempty=false)) : String[]
+		f2L = fastqLocal2 != nothing ? convert(Vector{String},split(table[i,fastqLocal2],separator,keepempty=false)) : String[]
 
 		push!(samples, Sample(n, f1, f2, f1L, f2L))
 	end

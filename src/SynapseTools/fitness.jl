@@ -12,14 +12,14 @@ end
 function appendfitness!(metadata::DataFrame, fitnessTable::DataFrame; allowInexactMatches=true)
     ids = metadata[:SampleID]
     @assert length(unique(ids)) == length(ids)
-    ids = dropna(fitnessTable[:SampleID])
+    ids = collect(skipmissing(fitnessTable[:SampleID]))
     @assert length(unique(ids)) == length(ids)
     @assert eltype(metadata[:Passage])<:Integer
     @assert eltype(fitnessTable[:Passage])<:Integer
 
     fitnessTable = copy(fitnessTable) # create copy since we will modify the table
     fitness = hcat(fitnessTable[:A],fitnessTable[:B],fitnessTable[:C])  # create Nx3 DataArray
-    fitness = map(i->mean(dropna(fitness[i,:][:])), 1:size(fitness,1)); # take mean of each row after dropping NAs
+    fitness = map(i->mean(skipmissing(fitness[i,:][:])), 1:size(fitness,1)); # take mean of each row after dropping NAs
     fitnessTable[:Fitness] = fitness
     fitnessTable = fitnessTable[.~isnan.(fitnessTable[:Fitness]), :] # drop measurements where 3 fitness values for a sample are NAs
 
