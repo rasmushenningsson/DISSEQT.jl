@@ -64,13 +64,13 @@ singletonindex(sz::Int, b::AbstractArray{Bool}) = sz==1 ? trues(1) : b # TODO: m
 
 function getindex(A::SingletonArray, I...)
 	# TODO: how do with the number of dimensions???
-	sz = size(A,(1:length(I))...) # match number of dimensions of I
+	sz = size.((A,), 1:length(I))  # match number of dimensions of I
 	getindex(A.array, map(singletonindex,sz,I)...)
 end
 
 
 function viewimpl(A::SingletonArray, I...)	
-	sz = size(A,(1:length(I))...) # match number of dimensions of I
+	sz = size.((A,), 1:length(I))  # match number of dimensions of I
 	SingletonArray(view(A.array, map(singletonindex,sz,I)...))
 end
 
