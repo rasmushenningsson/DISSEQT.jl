@@ -121,8 +121,6 @@ getsamplemetadata(syn, metadataID::AbstractString, args...) = getsamplemetadata(
 
 function appendsynapseids!(syn, metadata::DataFrame, folderID::AbstractString, fileSuffixes::AbstractArray, columnNames::AbstractArray{Symbol}; subFolder="")
     @assert length(fileSuffixes)==length(columnNames)
-    N = size(metadata,1)
-    synapseIDs = Vector{String}(N)
 
     for columnName in columnNames
         metadata[columnName] = ""
@@ -131,7 +129,7 @@ function appendsynapseids!(syn, metadata::DataFrame, folderID::AbstractString, f
     # partition samples by run, to make as few Synapse queries as possible
     runNames = metadata[:Run]
     for runName in unique(runNames)
-        runInd = find(runNames.==runName) # index of samples in this run in metadata table
+        runInd = findall(runNames.==runName) # index of samples in this run in metadata table
         sampleNames = metadata[runInd,:SampleID]
 
         sampleFolder = getchildbyname(syn, folderID, runName)

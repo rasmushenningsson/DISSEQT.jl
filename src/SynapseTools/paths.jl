@@ -174,7 +174,7 @@ function localpath(syn, path::AbstractString; kwargs...)
     end
 end
 
-localpath(syn, paths::AbstractArray; kwargs...) = map!(x->localpath(syn,x;kwargs...), Vector{String}(length(paths)), paths)
+localpath(syn, paths::AbstractArray; kwargs...) = map!(x->localpath(syn,x;kwargs...), Vector{String}(undef,length(paths)), paths)
 
 
 
