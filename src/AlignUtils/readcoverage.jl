@@ -80,7 +80,7 @@ end
 # Create coverage plots for a single run
 function coverageplots(syn, alignmentFolder, runName, doUpload, scriptFilename; 
                        bamCache="bam", outputFolder="plots", outFormats=[:png, :pdf], 
-                       log=STDOUT, activityName = "Read Coverage Plots")
+                       log=stdout, activityName = "Read Coverage Plots")
 # --- Setup --------------------------------------------------------------------
     # Where to find sample .bam files. Synapse Folder ID or local folder. Synapse ID should point to "MyProject/Analysis/Alignment/Bam".
     bamPath = childpath(syn, alignmentFolder, "Bam")

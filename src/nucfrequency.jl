@@ -69,7 +69,7 @@ end
 
 
 # for a single sequence
-function mlnucfreqs(m::NucQualityMap; log=STDOUT, method=:Newton, newtonRegularization=1e-6)
+function mlnucfreqs(m::NucQualityMap; log=stdout, method=:Newton, newtonRegularization=1e-6)
 	len = size(m,2)
 	freqs = zeros(4,len)
 	coverage = zeros(Int,len)
@@ -82,7 +82,7 @@ end
 
 
 # solve for the whole genome
-function mlnucfreqs(nqa::NucQualityAccumulator; log=STDOUT, method=:Newton, newtonRegularization=1e-6)
+function mlnucfreqs(nqa::NucQualityAccumulator; log=stdout, method=:Newton, newtonRegularization=1e-6)
 	N = length(nqa)
 	freqs = Vector{Matrix{Float64}}(undef,N)
 	positions = Vector{Vector{Int}}(undef,N)
@@ -97,7 +97,7 @@ end
 
 
 # solve for bam file
-function mlnucfreqs(bamFile::BamFile; log=STDOUT, strands=:both,
+function mlnucfreqs(bamFile::BamFile; log=stdout, strands=:both,
                     mappingQualityThreshold=30, baseQualityThreshold=30,
                     ignoreChimeric::Bool=true,
                     method=:Newton, newtonRegularization=1e-6)

@@ -1,5 +1,6 @@
 module Kruskal
 
+using LinearAlgebra
 using Statistics
 using Optim
 
@@ -196,11 +197,11 @@ distancematrix(dist::AbstractVector{T}) where {T} = (M=length(dist); N=round(Int
 
 
 function isotonicregression(Y::AbstractVector{T}, tieGroups::Vector{UnitRange}=[]) where {T}
-    X = Vector{Tuple{T,Int}}() # tuple with values and integer weight
+    X = Tuple{T,Int}[] # tuple with values and integer weight
 
     # reorder values in each tieGroup to put them in increasing order
     isempty(tieGroups) || (Y=copy(Y)) # avoid modifying the original vector
-    tiePerms = map!(rng->sortperm(Y[rng]), Vector{Vector{Int}}(length(tieGroups)), tieGroups)
+    tiePerms = map!(rng->sortperm(Y[rng]), Vector{Vector{Int}}(undef,length(tieGroups)), tieGroups)
     for (g,p) in zip(tieGroups,tiePerms)
         Y[g] = Y[g[p]]
     end
@@ -218,7 +219,7 @@ function isotonicregression(Y::AbstractVector{T}, tieGroups::Vector{UnitRange}=[
     end
 
     # unwrap to full vector by duplicating elements by their weight
-    Z = Vector{T}(length(Y))
+    Z = Vector{T}(undef,length(Y))
     zi = 1
     for x in X
         Z[zi:zi+x[2]-1] = x[1]
@@ -308,8 +309,8 @@ function kruskalmds(D::AbstractMatrix{T}, p::Integer, X0=convert(Matrix{T},randn
 
     # post-processing
     # the stress is invariant under rotation, so we can normalize rotation by principal axes
-    _,Σ,V = svd(X)
-    X = V*diagm(Σ)
+    F = svd(X)
+    X = F.V*Diagonal(F.S)
 
     X, S, converged, distancematrix(dist)
 end

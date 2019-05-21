@@ -147,7 +147,7 @@ function appendsynapseids!(syn, metadata::DataFrame, folderID::AbstractString, f
 
             matchingInd = indexin(sampleNames, matchingNames)
 
-            matchingMask = matchingInd.!=0
+            matchingMask = matchingInd.!=nothing
             metaInd = runInd[matchingMask]
             matchingInd = matchingInd[matchingMask]
 

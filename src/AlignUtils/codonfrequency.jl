@@ -71,7 +71,7 @@ end
 function computecodonfrequencies(syn, samplePaths::Vector{String},
                                  sampleNames::Vector{String}, 
                                  outFolder::String; 
-                                 log=STDOUT, bamDir="bam",
+                                 log=stdout, bamDir="bam",
                                  kwargs...)
 
 	# Threading modelled after the pmap implementation in http://docs.julialang.org/en/release-0.4/manual/parallel-computing/ (NB: not the same as actual pmap())

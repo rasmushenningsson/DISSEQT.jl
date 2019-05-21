@@ -455,7 +455,7 @@ end
 
 
 # for a single sequence
-function mlcodonfreqs(m::CodonQualityMap; log=STDOUT, method=:Newton, newtonRegularization=1e-6, maxIter::Integer=10000)
+function mlcodonfreqs(m::CodonQualityMap; log=stdout, method=:Newton, newtonRegularization=1e-6, maxIter::Integer=10000)
 	len = size(m,4)
 	freqs = zeros(4,4,4,len)
 	coverage = zeros(Int,len)
@@ -468,7 +468,7 @@ end
 
 
 # solve for the whole genome
-function mlcodonfreqs(cqa::CodonQualityAccumulator; log=STDOUT, method=:Newton, newtonRegularization=1e-6, maxIter::Integer=10000)
+function mlcodonfreqs(cqa::CodonQualityAccumulator; log=stdout, method=:Newton, newtonRegularization=1e-6, maxIter::Integer=10000)
 	# Array{Float64,4}[mlcodonfreqs(m,log=log,method=method,
 	# 				 newtonRegularization=newtonRegularization) for m in cqa]
 	N = length(cqa)
@@ -486,7 +486,7 @@ end
 
 
 # solve for bam file
-function mlcodonfreqs(bamFile::BamFile; log=STDOUT, strands=:both, 
+function mlcodonfreqs(bamFile::BamFile; log=stdout, strands=:both, 
 					  mappingQualityThreshold=30, baseQualityThreshold=30,
 					  ignoreChimeric::Bool=true,
 					  removeAmbiguous=true, method=:Newton, newtonRegularization=1e-6,

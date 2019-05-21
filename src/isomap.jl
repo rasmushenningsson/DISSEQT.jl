@@ -32,9 +32,9 @@ function makeconnected!(D::AbstractMatrix{T},DFull::AbstractMatrix{T}) where {T<
     if nbrComponents>1
         # collect and sort edges
         M = div(N*(N-1),2)
-        E    = Vector{T}(M)
-        from = Vector{Int}(M)
-        to   = Vector{Int}(M)
+        E    = zeros(T,M)
+        from = zeros(Int,M)
+        to   = zeros(Int,M)
         ind = 1
         for j=2:N
             for i=1:j-1
@@ -79,7 +79,7 @@ function isomapmatrix(D::AbstractMatrix{T}, nearestNeighbours::Integer, distance
     nearestNeighbours = min(N,nearestNeighbours+1) # add 1 to include self as neighbour
 
     I = similar(D) # Isomap matrix
-    I[:] = typemax(T)
+    I[:] .= typemax(T)
 
     for v=1:N # for each vertex, look at outgoing edges (i.e. row), and keep all edges in the neighbourhood (i.e. below distanceThreshold, but at least nearestNeighbour edges)
         # distsSorted = sort(D[v,:])
@@ -95,7 +95,7 @@ function isomapmatrix(D::AbstractMatrix{T}, nearestNeighbours::Integer, distance
             mask = D[v,:] .<= sort(D[v,:][:])[nearestNeighbours] # this includes ties
         end
 
-        I[v,mask] = D[v,mask] # copy edges
+        I[v,mask] .= D[v,mask] # copy edges
     end
 
     # make symmetric

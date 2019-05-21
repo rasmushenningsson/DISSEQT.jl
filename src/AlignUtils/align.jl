@@ -100,7 +100,7 @@ function bwaalign(trimmedFastq::OneOrTwo{String}, unsortedBam::String, ref::Stri
 	end
 
 	printifinfo(log,closebuf(out))
-	printifinfo(log,closebuf(err)) # samtools writes info to STDERR
+	printifinfo(log,closebuf(err)) # samtools writes info to stderr
 	ret != 0 && printiferror(log, "Alignment failed.")
 	flush(log)
 	ret
@@ -152,7 +152,7 @@ function bamsort(unsortedBam::String, sortedBam::String; nbrThreads=4, log=devnu
 	end
 
 	printifinfo(log,closebuf(out))
-	printifinfo(log,closebuf(err)) # samtools writes info to STDERR
+	printifinfo(log,closebuf(err)) # samtools writes info to stderr
 	ret != 0 && printiferror(log, "BAM sorting failed.")
 	flush(log)
 	ret
@@ -169,7 +169,7 @@ function bamindex(sortedBam::String; log=devnull)
 		ret = 1
 	end
 
-	printifinfo(log,closebuf(err)) # samtools writes info to STDERR
+	printifinfo(log,closebuf(err)) # samtools writes info to stderr
 	ret != 0 && printiferror(log, "BAM indexing failed.")
 	flush(log)
 	ret

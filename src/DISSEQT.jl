@@ -15,6 +15,7 @@ include("Plots/Plots.jl")
 using JLD
 using StatsBase # for sample
 using Statistics
+using LinearAlgebra
 using DataStructures
 using DataFrames
 using BioSequences

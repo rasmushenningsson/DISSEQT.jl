@@ -14,8 +14,8 @@ function appendfitness!(metadata::DataFrame, fitnessTable::DataFrame; allowInexa
     @assert length(unique(ids)) == length(ids)
     ids = collect(skipmissing(fitnessTable[:SampleID]))
     @assert length(unique(ids)) == length(ids)
-    @assert eltype(metadata[:Passage])<:Integer
-    @assert eltype(fitnessTable[:Passage])<:Integer
+    @assert eltype(skipmissing(metadata[:Passage]))<:Integer
+    @assert eltype(skipmissing(fitnessTable[:Passage]))<:Integer
 
     fitnessTable = copy(fitnessTable) # create copy since we will modify the table
     fitness = hcat(fitnessTable[:A],fitnessTable[:B],fitnessTable[:C])  # create Nx3 DataArray
@@ -30,7 +30,7 @@ function appendfitness!(metadata::DataFrame, fitnessTable::DataFrame; allowInexa
 
     # find exact SampleID matches between metadata and fitnessTable
     matches = indexin(metadata[:SampleID], map(string,fitnessTable[:SampleID])) # converting to string converts NA->"NA" which can be handled by indexin
-    hasMatches = matches.!=0
+    hasMatches = matches.!=nothing
     matches = matches[hasMatches]
 
     metadata[hasMatches, :Fitness]   = fitnessTable[matches, :Fitness]

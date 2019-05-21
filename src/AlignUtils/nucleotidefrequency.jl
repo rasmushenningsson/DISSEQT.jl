@@ -50,7 +50,7 @@ end
 # TODO: logging
 function computenucleotidefrequencies(samples::Vector{String},
                                       inFolder::String, outFolder::String;
-                                      log=STDOUT, kwargs...)
+                                      log=stdout, kwargs...)
 
 	sampleLogs = pmap(x->computenucleotidefrequencies(x,inFolder,outFolder;kwargs...),
 	                  samples)
