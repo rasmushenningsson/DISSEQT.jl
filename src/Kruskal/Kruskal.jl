@@ -49,7 +49,7 @@ mutable struct SData{T}
     numGrad::Vector{T} # gradient of numerator
     denGrad::Vector{T} # gradient of denominator
 end
-SData(p,N,targetD::Vector{T}) where {T} = SData(NaN*zeros(T,p*N),p,N,targetD,zero(T),zero(T),zero(T),Vector{T}(p*N),Vector{T}(p*N))
+SData(p,N,targetD::Vector{T}) where {T} = SData(NaN*zeros(T,p*N),p,N,targetD,zero(T),zero(T),zero(T),Vector{T}(undef,p*N),Vector{T}(undef,p*N))
 
 
 function update!(sData::SData{T},X) where {T}

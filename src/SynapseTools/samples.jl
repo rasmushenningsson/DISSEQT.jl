@@ -29,7 +29,7 @@ function referencefromlog(syn, logFile::AbstractString)
 
     pattern = r"^Assigned reference \"([^\"]+)\" to sample \"([^\"]+)\".$"
     matches = map( x->match(pattern,x), logFileText )
-    matches = matches[map!(x->x!=nothing, BitVector(length(matches)), matches)] # remove non-matches
+    matches = matches[map!(x->x!=nothing, falses(length(matches)), matches)] # remove non-matches
 
     logRefs = [splitext(m.captures[1])[1] for m in matches] # reference name without file ending (.fasta)
     logSamples = [m.captures[2] for m in matches]           # sample names
@@ -65,7 +65,7 @@ function wrongreferencefromlog(syn, logFile::AbstractString)
 
     pattern = r"^WARNING: ([^\"]+) is closer to reference \"([^\"]+)\" than to reference \"([^\"]+)\"\.$"
     matches = map( x->match(pattern,x), logFileText )
-    matches = matches[map!(x->x!=nothing, BitVector(length(matches)), matches)] # remove non-matches
+    matches = matches[map!(x->x!=nothing, falses(length(matches)), matches)] # remove non-matches
 
     logSamples = String[m.captures[1] for m in matches]     # sample names
     logWrongRefs = [splitext(m.captures[2])[1] for m in matches] # reference name without file ending (.fasta)
