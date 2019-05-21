@@ -5,7 +5,7 @@
 #              If it's a folder, all .csv files in the folder will be checked.
 function getsamplefitness(syn, fitnessPath)
     fitness = getsamplemetadata(syn, fitnessPath) # hijack metadata loading which is very similar
-    rename!(fitness, :MetadataID, :FitnessID)
+    rename!(fitness, :MetadataID=>:FitnessID)
 end
 
 
