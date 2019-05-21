@@ -4,7 +4,7 @@ mutable struct MedianAccumulatorSimple{T}
     values::Vector{T}
     ind::Int
 end
-MedianAccumulatorSimple(::Type{T},N) where {T} = MedianAccumulatorSimple(Vector{T}(2N+1),1)
+MedianAccumulatorSimple(::Type{T},N) where {T} = MedianAccumulatorSimple(Vector{T}(undef,2N+1),1)
 
 
 function init!(acc::MedianAccumulatorSimple{T}, A::AbstractArray{T}, N::Integer, dim::Integer, Ipost::CartesianIndex, Ipre::CartesianIndex) where {T}
@@ -38,8 +38,8 @@ function medianfilter(A::AbstractArray{T}, N::Integer, dim::Integer=1) where {T}
     B = similar(A)
 
     # Cartesian indexing follows exponential filter example from http://www.juliabloggers.com/multidimensional-algorithms-and-iteration/ 
-    Rpre = CartesianRange(size(A)[1:dim-1])
-    Rpost = CartesianRange(size(A)[dim+1:end])
+    Rpre = CartesianIndices(size(A)[1:dim-1])
+    Rpost = CartesianIndices(size(A)[dim+1:end])
 
     D = size(A,dim)
 

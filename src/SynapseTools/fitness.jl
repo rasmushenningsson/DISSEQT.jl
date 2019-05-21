@@ -40,7 +40,7 @@ function appendfitness!(metadata::DataFrame, fitnessTable::DataFrame; allowInexa
         fitnessTable = fitnessTable[setdiff(1:end,matches),:] # remove those fitness entries that have been used
         used = falses(size(fitnessTable,1)) # but from now on, keep track of which ones we have used rather than removing rows in the loop
 
-        for i in find(ismissing.(metadata[:Fitness])) # for those samples we don't have a fitness value for
+        for i in findall(ismissing.(metadata[:Fitness])) # for those samples we don't have a fitness value for
             if ismissing(metadata[i,:Reference]) || ismissing(metadata[i,:Mutagen]) || ismissing(metadata[i,:Dose]) || ismissing(metadata[i,:Passage])
                 continue # skip samples with incomplete metadata
             end

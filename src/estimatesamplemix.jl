@@ -1,5 +1,5 @@
 
-_uniqueid(a::AbstractVector) = indexin(a,unique(a)) # TODO: replace with indunique() or similar when it is introduced in julia (c.f. sort() and sortperm())
+_uniqueid(a::AbstractVector)::Vector{Int} = indexin(a,unique(a)) # TODO: replace with indunique() or similar when it is introduced in julia (c.f. sort() and sortperm())
 
 function _partitionpositions(referenceCodons::AbstractMatrix{Symbol})
     # for each position, assign an ID number to each reference s.t. they have the same ID if they coincide at that position
@@ -29,7 +29,7 @@ function _partitionmatrices(partitionInd::AbstractVector{Int}, referenceCodons::
     end
 
     
-    f = f ./ sum(f,1) # normalize freqs to sum to one for each position and sample (i.e. conditional probability given that we have to chose one of the reference codons)
+    f = f ./ sum(f;dims=1) # normalize freqs to sum to one for each position and sample (i.e. conditional probability given that we have to chose one of the reference codons)
 
 
     # output trimmed frequencies (Y matrix)
@@ -50,7 +50,7 @@ function _partitionmatrices(partitionInd::AbstractVector{Int}, referenceCodons::
     # output reference->codon identification matrix (A matrix)
     # A_ij == 1 iff reference j has codon i and 0 otherwise
     A = zeros(nbrUniqueCodons,nbrReferences)
-    A[sub2ind(size(A),_uniqueid(referenceCodons[partitionInd[1],:][:]),1:nbrReferences)] = 1 # figure out which references map to the same codon
+    setindex!.( (A,), 1, _uniqueid(referenceCodons[partitionInd[1],:][:]), 1:nbrReferences)
 
     # weight by number of positions in this group
     A *= nbrPositions
@@ -85,7 +85,7 @@ function estimatemix(swarms::AnnotatedArray, referenceGenomes::Vector{T}) where 
     Y = zeros(0,nbrSamples)
 
     for partition=1:nbrPartitions
-        Ap, Yp = _partitionmatrices(find(partition.==partitions), referenceCodons, freqs, codons)
+        Ap, Yp = _partitionmatrices(findall(partition.==partitions), referenceCodons, freqs, codons)
         # concat
         A = vcat(A,Ap)
         Y = vcat(Y,Yp)
@@ -96,9 +96,9 @@ function estimatemix(swarms::AnnotatedArray, referenceGenomes::Vector{T}) where 
     X = Variable(nbrReferences)
     for s=1:nbrSamples
         problem = minimize( sumsquares(A*X-Y[:,s]), [X>=0, ones(nbrReferences)'X==1] )
-        solve!(problem, SCSSolver(eps=1e-6,verbose=false), verbose=false)
+        solve!(problem, SCSSolver(eps=1e-6,max_iters=20000,verbose=false), verbose=false)
         problem.status==:Optimal || error("Failed to compute mix for sample ", swarms[:id][s])
-        mixes[s,:] = (z=max(X.value,0); z/sum(z)) # the solver might return slightly negative values, get rid of those
+        mixes[s,:] = (z=max.(X.value,0); z/sum(z)) # the solver might return slightly negative values, get rid of those
     end
 
     # # Fixing Y should improve performance, but the code below doesn't run faster even when we have hundreds of samples...

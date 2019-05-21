@@ -49,8 +49,8 @@ function _coverageplots(samplePaths, sampleNames, outputFolder, outName, outForm
         nbrSamples = size(cov,1)
         nbrPos     = size(cov,2)
 
-        pos = repmat( (1:nbrPos)', nbrSamples, 1)
-        name = repmat(sampleNames, 1, nbrPos)
+        pos = repeat( (1:nbrPos)', nbrSamples, 1)
+        name = repeat(sampleNames, 1, nbrPos)
         df = DataFrame(position=pos[:], coverage=cov[:], name=name[:])
 
         xTickStep = Int( 10^ceil(log10(nbrPos/2))/10 )

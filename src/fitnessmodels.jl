@@ -150,7 +150,8 @@ function leaveoneoutlandscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Flo
 
             # for elements with Bᵤᵥ<<1, we are not guaranteed good precision in the computations (because the closest sample has a much larger weight than the others, and it has been removed)
             # update Aᵤᵥ and Bᵤᵥ for those elements
-            for (u,v) in zip(ind2sub(size(B), find(B.<1e-3))...) # 1e-3 is still a conservative bound
+            # for (u,v) in zip(ind2sub(size(B), findall(B.<1e-3))...) # 1e-3 is still a conservative bound
+            for (u,v) in zip(Tuple.(CartesianIndices(B)[findall(B.<1e-3)])...) # 1e-3 is still a conservative bound
                 d2 = D2TestTrain[u,:]
                 d2[v] = Inf # remove training sample by setting it to infinitely far away
                 w = exp.( (minimum(d2).-d2)/(2σ^2) ) # note that minimum(d2) is different from above, which gives us the precision needed
@@ -179,9 +180,9 @@ function leaveoneoutlandscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Flo
         end
     end
 
-    meanErrors = dropdims(mean(allErrors,3); dims=3)
+    meanErrors = dropdims(mean(allErrors; dims=3); dims=3)
     ind = mapslices(argmin, meanErrors, 2)[:]
-    σValues[ind], meanErrors[sub2ind(size(meanErrors), 1:length(ind), ind)], meanErrors
+    σValues[ind], getindex.((meanErrors,), 1:length(ind), ind), meanErrors
 end
 
 
@@ -253,7 +254,7 @@ function leaveoneoutpredict(modelType, modelData, fitness, modelArgs...; perSamp
 
     N = size(modelData,1)
     nd = ndims(modelData)
-    colons = repmat([Colon()],nd-1) # for slicing in first dimension only
+    colons = repeat([Colon()],nd-1) # for slicing in first dimension only
 
     predicted = zeros(N)
     for i=1:N

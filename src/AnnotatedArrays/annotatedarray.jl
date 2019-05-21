@@ -417,7 +417,7 @@ function showall(io::IO, A::AnnotatedArray)
 		length(sAnnot)>0 && printsingletonannotations(io, A, sAnnot[.!map(any,nonSingletonDims)])
 
 		prevslice = CartesianIndex((zeros(Int,length(trailingSz))...,))
-		for slice in CartesianRange(trailingSz) # for each slice
+		for slice in CartesianIndices(trailingSz) # for each slice
 			printlnslicedesc(io,slice)
 			B = view(A,:,:,slice.I...) # TODO: can I avoid using CartesianIndex.I ???
 

@@ -64,7 +64,7 @@ function loadswarm(id::AbstractString, freqPath::AbstractString, consensusPath::
 		annotate!(A,:segment,[Symbol(segmentInfo[1][1])])
 	else
 		# if multiple segments, we need to annotate each position
-		segments = map( x->repmat([Symbol(x[1])], x[2]), segmentInfo )
+		segments = map( x->repeat([Symbol(x[1])], x[2]), segmentInfo )
 		segments = vcat(segments...)
 		annotate!(A,:segment,reshapesingleton(segments,4))
 	end
@@ -107,7 +107,7 @@ end
 function loadswarm(ids::AbstractArray, freqPaths::AbstractArray, consensusPaths::AbstractArray=String[])
 	@assert length(ids)==length(freqPaths)
 	@assert isempty(consensusPaths) || length(freqPaths)==length(consensusPaths)
-	isempty(consensusPaths) && (consensusPaths = repmat([""],length(freqPaths)))
+	isempty(consensusPaths) && (consensusPaths = repeat([""],length(freqPaths)))
 	cat(map((id,f,c)->loadswarm(id,f,c),ids,freqPaths,consensusPaths)...; dims=5)
 end
 

@@ -6,7 +6,7 @@ function timeseriesindices(t, identifiers...)
     uniqueIds = unique(combinedIds)
     repInd = indexin(combinedIds, uniqueIds) # assign the same index to all samples in the same replicate
 
-    ind = Vector{Int}[find(repInd.==i) for i=1:length(uniqueIds)] # each entry is a vector with all indices for that replicate
+    ind = Vector{Int}[findall(repInd.==i) for i=1:length(uniqueIds)] # each entry is a vector with all indices for that replicate
     ind = map(x->x[sortperm(t[x])], ind) # sort each time series by increasing time
     ind, uniqueIds
 end

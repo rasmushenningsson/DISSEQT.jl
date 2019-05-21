@@ -33,7 +33,7 @@ function fitnesslandscapeplot(model, x::AbstractVector{S}, y::AbstractVector{T},
     σTransparency *= min(maximum(x)-minimum(x), maximum(y)-minimum(y))
 
     N,M = length(x), length(y)
-    X,Y = repmat(x,1,M), repmat(y',N,1)
+    X,Y = repeat(x,1,M), repeat(y',N,1)
     gridPoints = hcat(X[:],Y[:]) # points to evaluate the landscape in
     Z = reshape(predictfitness(model, gridPoints), N, M) # surface
     α = reshape(_alpha(model,gridPoints,σTransparency), N, M) # alpha mask
@@ -69,7 +69,7 @@ function fitnesslandscapeplot(model, x::AbstractVector{S}, y::AbstractVector{T},
         uniquePointDesc = unique(pointDesc)
         pointIDs = indexin(pointDesc,uniquePointDesc)
         pointColors = String[_plotlycolor(pointColors[i]) for i=uniquePointDesc]
-        length(pointColors)==1 && (pointColors = repmat(pointColors,2)) # to avoid degenerate colorscale and div by zero
+        length(pointColors)==1 && (pointColors = repeat(pointColors,2)) # to avoid degenerate colorscale and div by zero
         nbrColors = length(pointColors)
         colorScale = [ [(i-1)/(nbrColors-1), pointColors[i]] for i=1:nbrColors ]
         col = (pointIDs-1)/(nbrColors-1)
