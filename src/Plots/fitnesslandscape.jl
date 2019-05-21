@@ -44,12 +44,14 @@ function fitnesslandscapeplot(model, x::AbstractVector{S}, y::AbstractVector{T},
     dzP = 0.1dz
     
     # adjust surface depending on α and add white surface hiding the 0-alpha parts
-    α1 = clamp.((α+.5)/0.5,0,1)
-    α2 = clamp.((α+1.5)/1,0,1)
-    Z1 = Z.*α2 + minimum(Z)*(1-α2) - dz*(1-α1)
-    Z2 = Z.*α2 + minimum(Z)*(1-α2) - dz*α1
+    α1 = clamp.((α.+.5)/0.5,0,1)
+    α2 = clamp.((α.+1.5)/1,0,1)
+    Z1 = Z.*α2 .+ minimum(Z)*(1 .- α2) .- dz*(1 .- α1)
+    Z2 = Z.*α2 .+ minimum(Z)*(1 .- α2) .- dz*α1
 
-    Z2[[1,end],:],Z2[:,[1,end]] = Z1[[1,end],:],Z1[:,[1,end]] # avoid gaps at the edges
+    # Z2[[1,end],:],Z2[:,[1,end]] = Z1[[1,end],:],Z1[:,[1,end]] # avoid gaps at the edges
+    Z2[[1,end],:] .= Z1[[1,end],:] # avoid gaps at the edges
+    Z2[:,[1,end]] .= Z1[:,[1,end]]
 
     whiteColorScale = Vector[[0,"rgb(255,255,255)"],[1,"rgb(255,255,255)"]]
     noLighting = py.attr(ambient=1, diffuse=0, specular=0, fresnel=0)
@@ -61,7 +63,7 @@ function fitnesslandscapeplot(model, x::AbstractVector{S}, y::AbstractVector{T},
     traces = [surf, surf2]
 
     if !isempty(points)
-        pZ = predictfitness(model, points) + dzP
+        pZ = predictfitness(model, points) .+ dzP
 
         uniquePointDesc = unique(pointDesc)
         pointIDs = indexin(pointDesc,uniquePointDesc)
@@ -72,8 +74,8 @@ function fitnesslandscapeplot(model, x::AbstractVector{S}, y::AbstractVector{T},
         col = (pointIDs-1)/(nbrColors-1)
 
         samples = py.scatter3d(x=points[:,1], y=points[:,2], z=pZ,
-                              mode="markers", 
-                              marker=py.attr(color=col, colorscale=colorScale, size=markerSize))
+                               mode="markers",
+                               marker=py.attr(color=col, colorscale=colorScale, size=markerSize))
         traces = vcat(traces,samples)
     end
 
