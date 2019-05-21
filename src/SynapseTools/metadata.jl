@@ -90,7 +90,7 @@ end
 
 
 function _loadmetadata(syn, fileID) 
-    T = CSV.read(localpath(syn, fileID))
+    T = CSV.read(localpath(syn, fileID); missingstrings=["","NA"])
     T[:MetadataID] = fileID # make an extra column with a reference to the metadata file!
     T
 end
