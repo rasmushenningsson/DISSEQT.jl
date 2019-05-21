@@ -222,7 +222,7 @@ function isotonicregression(Y::AbstractVector{T}, tieGroups::Vector{UnitRange}=[
     Z = Vector{T}(undef,length(Y))
     zi = 1
     for x in X
-        Z[zi:zi+x[2]-1] = x[1]
+        Z[zi:zi+x[2]-1] .= x[1]
         zi += x[2]
     end
 
