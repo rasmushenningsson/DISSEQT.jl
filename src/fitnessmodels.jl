@@ -83,7 +83,7 @@ _fitnesserror(D2::Matrix{Float64}, fitnessTrain::Vector{Float64}, fitnessTest::V
 # find optimal kernel width by repeated random subsampling
 function landscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Float64}, σValues::AbstractVector{Float64}; nbrIter=100, trainingProp=0.9)
     N = size(X,1)
-    X2 = sum(X.^2,2)
+    X2 = sum(X.^2; dims=2)
     D2 = X2 .+ X2' .- 2*X*X'
 
     nbrTest = round(Int,N*(1-trainingProp))
@@ -94,8 +94,8 @@ function landscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Float64}, σVa
     testMask = falses(N)
     for i=1:nbrIter
         # select a random training subset each time
-        testMask[:] = false
-        testMask[sample(1:N,nbrTest,replace=false)] = true
+        testMask[:] .= false
+        testMask[sample(1:N,nbrTest,replace=false)] .= true
 
         D2TestTrain = D2[testMask,.~testMask]
         fitnessTrain = fitness[.~testMask]
