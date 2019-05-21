@@ -54,7 +54,7 @@ function timeseriesmean(keyTimes::AbstractVector,V::AbstractMatrix)
     w = diff(keyTimes)/2
     w = vcat(w,0)+vcat(0,w)
     w = w/sum(w)
-    sum(V.*w', 2)
+    sum(V.*w'; dims=2)
 end
 timeseriesmean(keyTimes::AbstractVector{T},V::AbstractVector{S}) where {T<:AbstractVector,S<:AbstractMatrix} = map(timeseriesmean,keyTimes,V)
 
@@ -96,9 +96,9 @@ function distancecurve(t1::AbstractVector{T},t2::AbstractVector{T},V1::AbstractM
             Q = Q/(tEnd-tStart) # rescale s.t. parameter ranges from 0 to tEnd-tStart
 
             # ||l(s)||² = ||P+sQ||² = t²||Q||² + 2t<P,Q> + ||P||² = at² + bt + c
-            a = vecdot(Q,Q)
-            b = 2*vecdot(P,Q)
-            c = vecdot(P,P)
+            a = dot(Q,Q)
+            b = 2*dot(P,Q)
+            c = dot(P,P)
 
             push!(t, tStart)
             push!(params, c, b, a)

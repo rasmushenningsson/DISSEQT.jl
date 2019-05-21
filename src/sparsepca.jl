@@ -273,7 +273,7 @@ function sparsepcal1(X, k::Integer, c1; backtrack=true, tol=1e-6, maxIters=1000)
     end
 
     # change signs for stability, favouring U's that are positive on average
-    sgn = (sum(U,1).>=0)*2.0-1.0
+    sgn = (sum(U;dims=1).>=0)*2.0-1.0
     U .*= sgn
     V .*= sgn
 

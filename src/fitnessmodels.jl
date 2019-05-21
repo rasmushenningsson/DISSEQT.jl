@@ -3,7 +3,7 @@
 # returns MxN matrix of squared distance values, where M is the number of test points and N the number of model points
 function squareddistances(X::Matrix{Float64}, Y::Matrix{Float64})
     @assert size(Y,2)==size(X,2) # sequence space dimensions should be the same
-    sum(Y.^2,2)' .+ sum(X.^2,2) .- 2*X*Y'
+    sum(Y.^2;dims=2)' .+ sum(X.^2;dims=2) .- 2*X*Y'
 end
 
 # returns MxN matrix of edit distance values
@@ -58,8 +58,8 @@ function _predictfitness(D2::Matrix{Float64}, fitness::Vector{Float64}, σ::Floa
     # Wᵢⱼ = e^( -Dᵢⱼ²/(2σ²) )
     # But since we only care about each row of W up to a constant value, we can multiply each row with e^(Aᵢ/2σ²) where Aᵢ=minⱼ Dᵢⱼ²
     # this guarantees that we get precision in the computations, by making Wᵢⱼ=1 for the closest training point.
-    W = exp.( (minimum(D2,2).-D2)/(2σ^2) )
-    W = W./sum(W,2) # normalize sum of weights to 1 for each row
+    W = exp.( (minimum(D2;dims=2).-D2)/(2σ^2) )
+    W = W./sum(W;dims=2) # normalize sum of weights to 1 for each row
     W*fitness # the test point fitness is a weighted average of the fitness values for the training points
 end
 
@@ -118,7 +118,7 @@ end
 function leaveoneoutlandscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Float64}, σValues::AbstractVector{Float64}; nbrIter=100, trainingProp=0.9)
     N = size(X,1)
     @assert N==length(fitness)
-    X2 = sum(X.^2,2)
+    X2 = sum(X.^2;dims=2)
     D2 = X2 .+ X2' .- 2*X*X'
 
     nbrTest = round(Int,N*(1-trainingProp))
@@ -143,10 +143,10 @@ function leaveoneoutlandscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Flo
 
         # Case A, samples part of the Training set (different set of weights depending on which sample we leave out)
         for (j,σ) in enumerate(σValues)
-            W = exp.( (minimum(D2TestTrain,2).-D2TestTrain)/(2σ^2) )
+            W = exp.( (minimum(D2TestTrain;dims=2).-D2TestTrain)/(2σ^2) )
 
             A = W*fitnessTrain .- W.*fitnessTrain' # nbrTest x nbrTrain - unnormalized fitness for test sample i, with training sample j removed
-            B = sum(W,2) .- W                      # nbrTest x nbrTrain - sum of weights for test sample i, with training sample j removed
+            B = sum(W;dims=2) .- W                 # nbrTest x nbrTrain - sum of weights for test sample i, with training sample j removed
 
             # for elements with Bᵤᵥ<<1, we are not guaranteed good precision in the computations (because the closest sample has a much larger weight than the others, and it has been removed)
             # update Aᵤᵥ and Bᵤᵥ for those elements
@@ -155,7 +155,7 @@ function leaveoneoutlandscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Flo
                 d2 = D2TestTrain[u,:]
                 d2[v] = Inf # remove training sample by setting it to infinitely far away
                 w = exp.( (minimum(d2).-d2)/(2σ^2) ) # note that minimum(d2) is different from above, which gives us the precision needed
-                A[u,v] = vecdot(w,fitnessTrain)
+                A[u,v] = dot(w,fitnessTrain)
                 B[u,v] = sum(w)
             end
 
@@ -214,7 +214,7 @@ predictfitness(model::NearestNeighborModel{Float64}, X::Matrix{Float64}) = _pred
 # edit distance
 function _predictfitnesseditdist(D::Matrix{Int}, fitness::Vector{Float64})
     M,N = size(D)
-    minValues = minimum(D,2)
+    minValues = minimum(D;dims=2)
     hits = D.==minValues # mask of all closest samples
     Float64[ mean(fitness[hits[i,:][:]]) for i=1:M ]
 end
