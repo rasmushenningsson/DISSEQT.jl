@@ -9,7 +9,7 @@ using Colors
 using Cairo
 using Fontconfig
 
-# haskey(Pkg.installed(),"PlotlyJS") && (import PlotlyJS; const py=PlotlyJS) # import to avoid clash with Gadfly
+import PlotlyJS; const py=PlotlyJS # import to avoid clash with Gadfly
 
 
 export 
@@ -27,7 +27,7 @@ include("pairwise.jl")
 include("talus.jl")
 include("fitnesslandscape.jl")
 include("save.jl")
-# haskey(Pkg.installed(),"PlotlyJS") && include("saveplotly.jl")
+include("saveplotly.jl")
 
 
 

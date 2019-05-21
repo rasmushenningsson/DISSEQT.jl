@@ -24,9 +24,6 @@ function fitnesslandscapeplot(model, x::AbstractVector{S}, y::AbstractVector{T},
                               zMin=nothing, zMax=nothing,
                               markerSize=6,
                               σTransparency=0.05) where {S<:Real,T<:Real}
-    haskey(Pkg.installed(),"PlotlyJS") || error("Module PlotlyJS not installed, but required for fitnesslandscapeplot().")
-
-
     @assert size(points,2)==2
     @assert size(points,1)==length(pointDesc)
 
