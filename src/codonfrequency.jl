@@ -233,7 +233,7 @@ function newtonsolve(x0,rcc,counts; regularization=1e-6, maxIter::Integer=10000)
 			H[1:M,M+1] .= 1
 			H[M+1,1:M] .= 1
 	 		hessian!(view(H,1:M,1:M),x,rcc,counts)
-	 		# println("||H||=", vecnorm(H), ", cond(H)=", cond(H), ", ||H||₂=", norm(H))
+	 		# println("||H||=", norm(H), ", cond(H)=", cond(H), ", ||H||₂=", norm(H))
 	 		
 	 		regularizer = norm(H)*regularization
 	 		for i=1:M

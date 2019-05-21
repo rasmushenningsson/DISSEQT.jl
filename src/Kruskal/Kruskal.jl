@@ -61,8 +61,8 @@ function update!(sData::SData{T},X) where {T}
     numGrad = sData.numGrad
     denGrad = sData.denGrad
     num = den = zero(T)
-    numGrad[:] = 0
-    denGrad[:] = 0
+    numGrad[:] .= 0
+    denGrad[:] .= 0
     
 
     # for i<j, point indices
@@ -192,7 +192,7 @@ function distancematrix!(D::AbstractMatrix, dist::AbstractVector)
     end
     D
 end
-distancematrix(dist::AbstractVector{T}) where {T} = (M=length(dist); N=round(Int,1/2+sqrt(1/4+2M)); distancematrix!(Matrix{T}(N,N),dist))
+distancematrix(dist::AbstractVector{T}) where {T} = (M=length(dist); N=round(Int,1/2+sqrt(1/4+2M)); distancematrix!(Matrix{T}(undef,N,N),dist))
 
 
 
@@ -299,7 +299,7 @@ function kruskalmds(D::AbstractMatrix{T}, p::Integer, X0=convert(Matrix{T},randn
 
         XOld = X
         X,S = updatelocation(dist,X,tol)
-        stepSize = vecnorm(X-XOld)
+        stepSize = norm(X-XOld)
 
         # println("i: ", i, ", S=", S, ", stepSize=", stepSize, ", prevS-S=", prevS-S, ", tol*S=", tol*S)
         stepSize<tol && (converged=true; break)
