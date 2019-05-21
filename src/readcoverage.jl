@@ -16,7 +16,7 @@ end
 
 function coverage(rca::ReadCoverageAccumulator)
 	N = length(rca.dCoverage)
-	map!(_integratecoverage, Vector{Vector{Int}}(N), rca.dCoverage)
+	map!(_integratecoverage, Vector{Vector{Int}}(undef,N), rca.dCoverage)
 end
 
 
