@@ -181,7 +181,7 @@ function leaveoneoutlandscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Flo
     end
 
     meanErrors = dropdims(mean(allErrors; dims=3); dims=3)
-    ind = mapslices(argmin, meanErrors, 2)[:]
+    ind = mapslices(argmin, meanErrors; dims=2)[:]
     σValues[ind], getindex.((meanErrors,), 1:length(ind), ind), meanErrors
 end
 

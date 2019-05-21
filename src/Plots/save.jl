@@ -37,7 +37,7 @@ function saveplot(pl::AbstractArray{Plot},format::Symbol,outPath::AbstractString
         c && _addbg!(p)
     end
 
-    combined = hstack(mapslices(vstack,pl,2)...) # stack vertically and then horizontally
+    combined = hstack(mapslices(vstack,pl;dims=2)...) # stack vertically and then horizontally
     filename = _saveplot(combined,format,outPath; kwargs...)
 
     for (p,c) in zip(pl,changeBG)
