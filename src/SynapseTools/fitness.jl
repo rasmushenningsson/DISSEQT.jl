@@ -25,8 +25,8 @@ function appendfitness!(metadata::DataFrame, fitnessTable::DataFrame; allowInexa
 
 
     # create new columns
-    metadata[:Fitness] = 0.0
-    metadata[:FitnessID] = ""
+    metadata[:Fitness] = Vector{Union{Missing,Float64}}(missing, size(metadata,1))
+    metadata[:FitnessID] = Vector{Union{Missing,String}}(missing, size(metadata,1))
 
     # find exact SampleID matches between metadata and fitnessTable
     matches = indexin(metadata[:SampleID], map(string,fitnessTable[:SampleID])) # converting to string converts NA->"NA" which can be handled by indexin

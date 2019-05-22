@@ -22,7 +22,7 @@ end
 function groupequal(X,Y)
     @assert size(Y,2)==size(X,2)
     M,N = size(X,1),size(Y,1)
-    D = BitArray(M,N)
+    D = falses(M,N)
     for j=1:N
         for i=1:M
             D[i,j] = X[i,:] == Y[j,:]
