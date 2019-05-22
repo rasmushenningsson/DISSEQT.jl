@@ -29,5 +29,4 @@ SubMatrixSelectionSVD = "1e09ba94-8865-5af0-8cfd-6b3609c426e6"
 SynapseClient = "bcb84a12-78c7-11e9-04c6-8933c0472cec"
 
 [compat]
-SynapseClient = "0.2"
 julia = "1"
