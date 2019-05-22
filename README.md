@@ -28,6 +28,8 @@ Example scripts and other relevant files for running alignment using DISSEQT can
 The outputs of the Alignment step are [BAM Files](https://www.synapse.org/#!Synapse:syn18694439), the consensus sequence and a detailed alignment log for each sample are also saved in the same folder.
 An overview log file - [AlignUtils.log](https://www.synapse.org/#!Synapse:syn18695095) - is also created. 
 
+An optional step for quality control is to create [Read Coverage graphs](https://www.synapse.org/#!Synapse:syn18728439) by running another [script](https://www.synapse.org/#!Synapse:syn18728454).
+
 ## Codon Frequency Inference
 Codon frequencies are inferred from BAM Files. An example script can be found [here](https://www.synapse.org/#!Synapse:syn18697620).
 The output is one [Mutant Swarm File](https://www.synapse.org/#!Synapse:syn18697618) per sample and an [overview log file](https://www.synapse.org/#!Synapse:syn18697621).
