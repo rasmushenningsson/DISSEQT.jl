@@ -10,6 +10,7 @@ using Cairo
 using Fontconfig
 
 import PlotlyJS; const py=PlotlyJS # import to avoid clash with Gadfly
+using ORCA
 
 
 export 

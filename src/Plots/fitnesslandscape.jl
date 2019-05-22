@@ -71,7 +71,7 @@ function fitnesslandscapeplot(model, x::AbstractVector{S}, y::AbstractVector{T},
         length(pointColors)==1 && (pointColors = repeat(pointColors,2)) # to avoid degenerate colorscale and div by zero
         nbrColors = length(pointColors)
         colorScale = [ [(i-1)/(nbrColors-1), pointColors[i]] for i=1:nbrColors ]
-        col = (pointIDs-1)/(nbrColors-1)
+        col = (pointIDs.-1)/(nbrColors-1)
 
         samples = py.scatter3d(x=points[:,1], y=points[:,2], z=pZ,
                                mode="markers",
