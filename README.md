@@ -1,5 +1,5 @@
 # DISSEQT.jl
-The DISSEQT.jl package is an implementation of the pipeline described in the paper [DISSEQT – DIStribution based modeling of SEQuence Space Time dynamics](https://www.biorxiv.org/content/10.1101/327338v1).
+The DISSEQT.jl package is a Julia implementation of the pipeline described in the paper [DISSEQT – DIStribution based modeling of SEQuence Space Time dynamics](https://www.biorxiv.org/content/10.1101/327338v1).
 
 
 
