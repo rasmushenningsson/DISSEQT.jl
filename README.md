@@ -15,6 +15,7 @@ Also see installation instructions for [SynapseClient.jl](https://github.com/ras
 # Examples
 The complete analysis of deep sequencing data from the [DISSEQT paper](https://www.biorxiv.org/content/10.1101/327338v1) is available in Synapse [here](https://www.synapse.org/#!Synapse:syn11639899). 
 Note how the Provenance system in Synapse makes it possible to trace the steps used to produce every result in Synapse, showing how the analysis was done (which script was called) and listing all input files.
+All example scripts below upload their results to Synapse. The scripts themselves are also automatically uploaded to ensure that all analyses can be rerun elsewhere.
 The steps in the DISSET pipeline are outlined below:
 
 ## Alignment
@@ -24,6 +25,10 @@ To run alignment locally, you need to have [bwa](https://github.com/lh3/bwa), [s
 
 Example scripts and other relevant files for running alignment using DISSEQT can be found [here](https://www.synapse.org/#!Synapse:syn18694207). It is recommended to use one [script](https://www.synapse.org/#!Synapse:syn18695094) for each run. The [Reference Genomes](https://www.synapse.org/#!Synapse:syn18694208) and [Adapter](https://www.synapse.org/#!Synapse:syn18694218) files are also needed.
 
+The outputs of the Alignment step are [BAM Files](https://www.synapse.org/#!Synapse:syn18694439), the consensus sequence and a detailed alignment log for each sample are also saved in the same folder.
+An overview log file - [AlignUtils.log](https://www.synapse.org/#!Synapse:syn18695095) - is also created. 
+
+## Codon Frequency Inference
 
 
 # Contact
