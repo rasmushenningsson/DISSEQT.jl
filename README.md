@@ -45,5 +45,8 @@ One of the core features of the DISSEQT pipeline is to produce a low-dimensional
 The script for the Fitness Landscape data set can be found [here](https://www.synapse.org/#!Synapse:syn18716280).
 First, a high-dimensional representation is created using the inferred codon frequencies and estimated per-variant limits of detection. Second, [SubMatrix Selection SVD](https://github.com/rasmushenningsson/SubMatrixSelectionSVD.jl) is used for dimension reduction, based on the number of dimensions determined in the Talus Plot.
 
+## Downstream Analysis
+Based on the low-dimensional representatation, fitness landscapes and sequence space visualizations are created in this [script](https://www.synapse.org/#!Synapse:syn18774440). An evaluation of the ability of different models to predict fitness is performed in this [script](https://www.synapse.org/#!Synapse:syn18774322).
+
 # Contact
 If you have problems running DISSEQT, please open an issue in the Issue Tracker or contact rasmus.henningsson@med.lu.se.
