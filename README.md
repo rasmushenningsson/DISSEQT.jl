@@ -29,6 +29,7 @@ The outputs of the Alignment step are [BAM Files](https://www.synapse.org/#!Syna
 An overview log file - [AlignUtils.log](https://www.synapse.org/#!Synapse:syn18695095) - is also created. 
 
 An optional step for quality control is to create [Read Coverage graphs](https://www.synapse.org/#!Synapse:syn18728439) by running another [script](https://www.synapse.org/#!Synapse:syn18728454).
+![Read Coverage](doc/images/readcoverage_H03UAAFXX_Stop.png)
 
 ## Codon Frequency Inference
 Codon frequencies are inferred from BAM Files. An example script can be found [here](https://www.synapse.org/#!Synapse:syn18697620).
@@ -39,14 +40,17 @@ DISSEQT determines the Limit of Detection for each codon at each site per experi
 
 ## Dimension Estimation
 A Talus Plot used for dimension estimation of the Fitness Landscape data set can be created using this [script](https://www.synapse.org/#!Synapse:syn18701723).
+![Talus Plot](doc/images/talus.png)
 
 ## Sequence Space Representation
 One of the core features of the DISSEQT pipeline is to produce a low-dimensional representation of the Mutant Swarms in Sequence Space, which is useful for plotting and downstream analysis.
 The script for the Fitness Landscape data set can be found [here](https://www.synapse.org/#!Synapse:syn18716280).
 First, a high-dimensional representation is created using the inferred codon frequencies and estimated per-variant limits of detection. Second, [SubMatrix Selection SVD](https://github.com/rasmushenningsson/SubMatrixSelectionSVD.jl) is used for dimension reduction, based on the number of dimensions determined in the Talus Plot.
+![SubMatrixSelectionSVD plot](doc/images/pairwise.png)
 
 ## Downstream Analysis
 Based on the low-dimensional representatation, fitness landscapes and sequence space visualizations are created in this [script](https://www.synapse.org/#!Synapse:syn18774440). An evaluation of the ability of different models to predict fitness is performed in this [script](https://www.synapse.org/#!Synapse:syn18774322).
+![Fitness Landscape](doc/images/isomap_landscape.png)
 
 # Contact
 If you have problems running DISSEQT, please open an issue in the Issue Tracker or contact rasmus.henningsson@med.lu.se.
