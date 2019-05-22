@@ -24,17 +24,19 @@ If you already have BAM files, you can start the DISSEQT pipeline from the next 
 
 To run alignment locally, you need to have [bwa](https://github.com/lh3/bwa), [samtools](http://www.htslib.org) and [fastq-mcf](https://expressionanalysis.github.io/ea-utils/) installed and available in your path.
 
-Example scripts and other relevant files for running alignment using DISSEQT can be found [here](https://www.synapse.org/#!Synapse:syn18694207). It is recommended to use one [script](https://www.synapse.org/#!Synapse:syn18695094) for each run. The [Reference Genomes](https://www.synapse.org/#!Synapse:syn18694208) and [Adapter](https://www.synapse.org/#!Synapse:syn18694218) files are also needed.
+Example scripts and other relevant files for running alignment using DISSEQT can be found [here](https://www.synapse.org/#!Synapse:syn18694207). It is recommended to use one [script](https://www.synapse.org/#!Synapse:syn18695094) for each run. The [Reference Genomes](https://www.synapse.org/#!Synapse:syn18694208) and [Adapter](https://www.synapse.org/#!Synapse:syn18694218) files are also needed. The iterative alignment typically took about 1-4 minutes per sample on a modest desktop computer.  Alignment for multiple samples can be run in parallel to cut total runtime.
 
 The outputs of the Alignment step are [BAM Files](https://www.synapse.org/#!Synapse:syn18694439), the consensus sequence and a detailed alignment log for each sample are also saved in the same folder.
-An overview log file - [AlignUtils.log](https://www.synapse.org/#!Synapse:syn18695095) - is also created. 
+An overview log file - [AlignUtils.log](https://www.synapse.org/#!Synapse:syn18695095) - is also created.
 
 An optional step for quality control is to create [Read Coverage graphs](https://www.synapse.org/#!Synapse:syn18728439) by running another [script](https://www.synapse.org/#!Synapse:syn18728454).
 ![Read Coverage](doc/images/readcoverage_H03UAAFXX_Stop.png)
 
 ## Codon Frequency Inference
 Codon frequencies are inferred from BAM Files. An example script can be found [here](https://www.synapse.org/#!Synapse:syn18697620).
-The output is one [Mutant Swarm File](https://www.synapse.org/#!Synapse:syn18697618) per sample and an [overview log file](https://www.synapse.org/#!Synapse:syn18697621).
+The output is one [Mutant Swarm File](https://www.synapse.org/#!Synapse:syn18697618) per sample and an [overview log file](https://www.synapse.org/#!Synapse:syn18697621). Runtimes for the codon frequency inference were similar to alignment at about 1-4 minutes per sample on a modest desktop computer. Inference for multiple samples can be run in parallel to cut total runtime.
+
+All the later steps run in a matter of minutes for the whole data set.
 
 ## Limit of Detection
 DISSEQT determines the Limit of Detection for each codon at each site per experiment. To account for differences between runs, a [Metadata table](https://www.synapse.org/#!Synapse:syn11639906) with details about the samples is needed for this step. The Limit of Detection script for the Fitness Landscape data set can be found [here](https://www.synapse.org/#!Synapse:syn18700843).
