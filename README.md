@@ -34,5 +34,16 @@ An optional step for quality control is to create [Read Coverage graphs](https:/
 Codon frequencies are inferred from BAM Files. An example script can be found [here](https://www.synapse.org/#!Synapse:syn18697620).
 The output is one [Mutant Swarm File](https://www.synapse.org/#!Synapse:syn18697618) per sample and an [overview log file](https://www.synapse.org/#!Synapse:syn18697621).
 
+## Limit of Detection
+DISSEQT determines the Limit of Detection for each codon at each site per experiment. To account for differences between runs, a [Metadata table](https://www.synapse.org/#!Synapse:syn11639906) with details about the samples is needed for this step. The Limit of Detection script for the Fitness Landscape data set can be found [here](https://www.synapse.org/#!Synapse:syn18700843).
+
+## Dimension Estimation
+A Talus Plot used for dimension estimation of the Fitness Landscape data set can be created using this [script](https://www.synapse.org/#!Synapse:syn18701723).
+
+## Sequence Space Representation
+One of the core features of the DISSEQT pipeline is to produce a low-dimensional representation of the Mutant Swarms in Sequence Space, which is useful for plotting and downstream analysis.
+The script for the Fitness Landscape data set can be found [here](https://www.synapse.org/#!Synapse:syn18716280).
+First, a high-dimensional representation is created using the inferred codon frequencies and estimated per-variant limits of detection. Second, [SubMatrix Selection SVD](https://github.com/rasmushenningsson/SubMatrixSelectionSVD.jl) is used for dimension reduction, based on the number of dimensions determined in the Talus Plot.
+
 # Contact
 If you have problems running DISSEQT, please open an issue in the Issue Tracker or contact rasmus.henningsson@med.lu.se.
