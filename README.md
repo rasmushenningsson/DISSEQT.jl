@@ -13,8 +13,9 @@ Also see installation instructions for [SynapseClient.jl](https://github.com/ras
 
 
 # Examples
-The complete analysis of deep sequencing data from the [DISSEQT paper](https://www.biorxiv.org/content/10.1101/327338v1) is available in Synapse [here](https://www.synapse.org/#!Synapse:syn11639899). 
-Note how the Provenance system in Synapse makes it possible to trace the steps used to produce every result in Synapse, showing how the analysis was done (which script was called) and listing all input files.
+The complete analysis of deep sequencing data from the [DISSEQT paper](https://www.biorxiv.org/content/10.1101/327338v1) is available at the collaborative science platform Synapse [here](https://www.synapse.org/#!Synapse:syn11639899). In order to view and download files you must create a Synapse account.
+
+The Provenance system in Synapse makes it possible to trace the steps used to produce every result in Synapse, showing how the analysis was done (which script was called) and listing all input files.
 All example scripts below upload their results to Synapse. The scripts themselves are also automatically uploaded to ensure that all analyses can be rerun elsewhere. (In order to run the scripts locally, you need to make the Julia Packages used by the script avaiable by running e.g. `add JLD` in the Julia Package REPL.)
 The steps in the DISSET pipeline are outlined below:
 
