@@ -130,8 +130,8 @@ function leaveoneoutlandscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Flo
     testMask = falses(N)
     for i=1:nbrIter
         # select a random training subset each time
-        testMask[:] = false
-        testMask[sample(1:N,nbrTest,replace=false)] = true
+        testMask[:] .= false
+        testMask[sample(1:N,nbrTest,replace=false)] .= true
 
         D2TestTrain = D2[testMask,.~testMask]
         fitnessTrain = fitness[.~testMask]
@@ -151,7 +151,7 @@ function leaveoneoutlandscapekernelwidth(X::Matrix{Float64}, fitness::Vector{Flo
             # for elements with Bᵤᵥ<<1, we are not guaranteed good precision in the computations (because the closest sample has a much larger weight than the others, and it has been removed)
             # update Aᵤᵥ and Bᵤᵥ for those elements
             # for (u,v) in zip(ind2sub(size(B), findall(B.<1e-3))...) # 1e-3 is still a conservative bound
-            for (u,v) in zip(Tuple.(CartesianIndices(B)[findall(B.<1e-3)])...) # 1e-3 is still a conservative bound
+            for (u,v) in Tuple.(CartesianIndices(B)[findall(B.<1e-3)]) # 1e-3 is still a conservative bound
                 d2 = D2TestTrain[u,:]
                 d2[v] = Inf # remove training sample by setting it to infinitely far away
                 w = exp.( (minimum(d2).-d2)/(2σ^2) ) # note that minimum(d2) is different from above, which gives us the precision needed
@@ -267,4 +267,4 @@ function leaveoneoutpredict(modelType, modelData, fitness, modelArgs...; perSamp
 end
 
 
-varianceunexplained(predicted,truth) = sum((predicted-truth).^2) / sum((truth-mean(truth)).^2)
+varianceunexplained(predicted,truth) = sum((predicted.-truth).^2) / sum((truth.-mean(truth)).^2)
