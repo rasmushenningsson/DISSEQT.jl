@@ -15,7 +15,7 @@ Also see installation instructions for [SynapseClient.jl](https://github.com/ras
 # Examples
 The complete analysis of deep sequencing data from the [DISSEQT paper](https://www.biorxiv.org/content/10.1101/327338v1) is available in Synapse [here](https://www.synapse.org/#!Synapse:syn11639899). 
 Note how the Provenance system in Synapse makes it possible to trace the steps used to produce every result in Synapse, showing how the analysis was done (which script was called) and listing all input files.
-All example scripts below upload their results to Synapse. The scripts themselves are also automatically uploaded to ensure that all analyses can be rerun elsewhere.
+All example scripts below upload their results to Synapse. The scripts themselves are also automatically uploaded to ensure that all analyses can be rerun elsewhere. (In order to run the scripts locally, you need to make the Julia Packages used by the script avaiable by running e.g. `add JLD` in the Julia Package REPL.)
 The steps in the DISSET pipeline are outlined below:
 
 ## Alignment
@@ -29,7 +29,8 @@ The outputs of the Alignment step are [BAM Files](https://www.synapse.org/#!Syna
 An overview log file - [AlignUtils.log](https://www.synapse.org/#!Synapse:syn18695095) - is also created. 
 
 ## Codon Frequency Inference
-
+Codon frequencies are inferred from BAM Files. An example script can be found [here](https://www.synapse.org/#!Synapse:syn18697620).
+The output is one [Mutant Swarm File](https://www.synapse.org/#!Synapse:syn18697618) per sample and an [overview log file](https://www.synapse.org/#!Synapse:syn18697621).
 
 # Contact
 If you have problems running DISSEQT, please open an issue in the Issue Tracker or contact rasmus.henningsson@med.lu.se.
