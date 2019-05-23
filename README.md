@@ -13,7 +13,7 @@ Also see installation instructions for [SynapseClient.jl](https://github.com/ras
 
 
 # Examples
-The complete analysis of deep sequencing data from the [DISSEQT paper](https://www.biorxiv.org/content/10.1101/327338v1) is available at the collaborative science platform Synapse [here](https://www.synapse.org/#!Synapse:syn11639899). In order to view and download files you must create a Synapse account.
+The complete analysis of deep sequencing data from the [DISSEQT paper](https://www.biorxiv.org/content/10.1101/327338v1) is available at the collaborative science platform Synapse [here](https://www.synapse.org/#!Synapse:syn11639899). In order to view and download files you must create a Synapse account. (The scripts are also available [in the examples folder](https://github.com/rasmushenningsson/DISSEQT.jl/tree/master/examples) for reference, but note that you will need a Synapse account to access the data files.)
 
 The Provenance system in Synapse makes it possible to trace the steps used to produce every result in Synapse, showing how the analysis was done (which script was called) and listing all input files.
 All example scripts below upload their results to Synapse. The scripts themselves are also automatically uploaded to ensure that all analyses can be rerun elsewhere. (In order to run the scripts locally, you need to make the Julia Packages used by the script avaiable by running e.g. `add JLD` in the Julia Package REPL.)
@@ -56,4 +56,4 @@ Based on the low-dimensional representatation, fitness landscapes and sequence s
 ![Fitness Landscape](doc/images/isomap_landscape.png)
 
 # Contact
-If you have problems running DISSEQT, please open an issue in the Issue Tracker or contact rasmus.henningsson@med.lu.se.
+If you have problems running DISSEQT, please open an issue in the Issue Tracker or contact rasmus.henningsson@med.lu.se. A docker file will be published soon.
