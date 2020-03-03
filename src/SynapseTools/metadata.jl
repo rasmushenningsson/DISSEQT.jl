@@ -91,7 +91,7 @@ end
 
 function _loadmetadata(syn, fileID) 
     T = CSV.read(localpath(syn, fileID); missingstrings=["","NA"])
-    T[!,:MetadataID] = fileID # make an extra column with a reference to the metadata file!
+    T[!,:MetadataID] .= fileID # make an extra column with a reference to the metadata file!
     T
 end
 
@@ -123,7 +123,7 @@ function appendsynapseids!(syn, metadata::DataFrame, folderID::AbstractString, f
     @assert length(fileSuffixes)==length(columnNames)
 
     for columnName in columnNames
-        metadata[!,columnName] = ""
+        metadata[!,columnName] .= ""
     end
 
     # partition samples by run, to make as few Synapse queries as possible
@@ -202,7 +202,7 @@ function downloadbymeta!(syn, metadata::DataFrame, IDColumn::Symbol, pathColumn:
             localpath(syn, ids[mask]) :
             localpath(syn, ids[mask], downloadLocation=cacheDir, ifcollision="overwrite.local")
 
-    metadata[!,pathColumn] = ""
+    metadata[!,pathColumn] .= ""
     metadata[mask,pathColumn] = paths
     metadata
 end
