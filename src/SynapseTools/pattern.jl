@@ -11,6 +11,6 @@ matchany(p::Function, s::AbstractString) = p(s)
 
 matchany(p::AbstractArray, s::AbstractString) = any(x->match(x,s)!=nothing,p)
 
-matchany(p::Pattern, s::AbstractArray) = map!(x->matchany(p,x),BitArray(size(s)),s)
+matchany(p::Pattern, s::AbstractArray) = map!(x->matchany(p,x),falses(size(s)),s)
 
 
