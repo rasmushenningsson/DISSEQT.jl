@@ -6,9 +6,11 @@ The DISSEQT.jl package is a Julia implementation of the pipeline described in th
 # Installation
 Start Julia (1.1 or later) and enter the Package REPL by pressing ]. Then install DISSEQT.jl by entering:
 ```
+registry add https://github.com/BioJulia/BioJuliaRegistry.git
 add https://github.com/rasmushenningsson/SynapseClient.jl.git
 add https://github.com/rasmushenningsson/DISSEQT.jl.git
 ```
+(The BioJuliaRegistry is needed for the FASTX.jl package used by DISSEQT to read .fasta files.)
 Also see installation instructions for [SynapseClient.jl](https://github.com/rasmushenningsson/SynapseClient.jl) if you want to enable the [Synapse](https://www.synapse.org) features in DISSEQT.
 
 
