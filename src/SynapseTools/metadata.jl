@@ -26,7 +26,7 @@ function metadatatemplate(syn, runName::AbstractString; bamFolder::AbstractStrin
     ids,names = listaligned(syn, bamFolder, runName::AbstractString)
     mask = .~matchany(exclude, names)
     ids,names = ids[mask],names[mask]
-    map!(x->x[1:end-4], names) # remove ".bam" from end
+    map!(x->x[1:end-4], names, names) # remove ".bam" from end
 
     references = isempty(logFile) ? "" : referencefromlog(syn, logFile, names)
 
