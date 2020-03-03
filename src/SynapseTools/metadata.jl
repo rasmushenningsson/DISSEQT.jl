@@ -58,17 +58,17 @@ end
 filtermetadata(metadata::DataFrame, filter::Symbol) = filter in names(metadata) ? metadata : DataFrame()
 function filtermetadata(metadata::DataFrame, filter::Pair{Symbol,T}) where {T<:AbstractArray}
     filter.first in names(metadata) || return DataFrame()
-    mask = map!(x->!ismissing(x) && x in filter.second, falses(size(metadata,1)), metadata[filter.first])
+    mask = map!(x->!ismissing(x) && x in filter.second, falses(size(metadata,1)), metadata[!,filter.first])
     count(mask)==0 ? DataFrame() : metadata[mask,:]
 end
 function filtermetadata(metadata::DataFrame, filter::Pair{Symbol,T}) where {T}
     filter.first in names(metadata) || return DataFrame()
-    mask = .~ismissing.(metadata[filter.first]) .& (metadata[filter.first] .== filter.second)
+    mask = .~ismissing.(metadata[!,filter.first]) .& (metadata[!,filter.first] .== filter.second)
     count(mask)==0 ? DataFrame() : metadata[mask,:]
 end
 function filtermetadata(metadata::DataFrame, filter::Pair{Symbol,Function}) 
     filter.first in names(metadata) || return DataFrame()
-    mask = map!(filter.second, falses(size(metadata,1)), metadata[filter.first])
+    mask = map!(filter.second, falses(size(metadata,1)), metadata[!,filter.first])
     count(mask)==0 ? DataFrame() : metadata[mask,:]
 end
 function filtermetadata(metadata::DataFrame, filter::Function) 
@@ -91,7 +91,7 @@ end
 
 function _loadmetadata(syn, fileID) 
     T = CSV.read(localpath(syn, fileID); missingstrings=["","NA"])
-    T[:MetadataID] = fileID # make an extra column with a reference to the metadata file!
+    T[!,:MetadataID] = fileID # make an extra column with a reference to the metadata file!
     T
 end
 
@@ -123,11 +123,11 @@ function appendsynapseids!(syn, metadata::DataFrame, folderID::AbstractString, f
     @assert length(fileSuffixes)==length(columnNames)
 
     for columnName in columnNames
-        metadata[columnName] = ""
+        metadata[!,columnName] = ""
     end
 
     # partition samples by run, to make as few Synapse queries as possible
-    runNames = metadata[:Run]
+    runNames = metadata[!,:Run]
     for runName in unique(runNames)
         runInd = findall(runNames.==runName) # index of samples in this run in metadata table
         sampleNames = metadata[runInd,:SampleID]
@@ -195,14 +195,14 @@ function downloadbymeta!(syn, metadata::DataFrame, IDColumn::Symbol, pathColumn:
     
     kwargs = isempty(cacheDir) ? () :    
 
-    ids = metadata[IDColumn]
+    ids = metadata[!,IDColumn]
     mask = .~ismissing.(ids)
 
     paths = isempty(cacheDir) ?
             localpath(syn, ids[mask]) :
             localpath(syn, ids[mask], downloadLocation=cacheDir, ifcollision="overwrite.local")
 
-    metadata[pathColumn] = ""
+    metadata[!,pathColumn] = ""
     metadata[mask,pathColumn] = paths
     metadata
 end
