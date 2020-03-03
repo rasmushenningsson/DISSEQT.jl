@@ -18,7 +18,7 @@ using Statistics
 using LinearAlgebra
 using DataStructures
 using DataFrames
-using BioSequences
+using FASTX
 
 using .AnnotatedArrays
 using .BamReader

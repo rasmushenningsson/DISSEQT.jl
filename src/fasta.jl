@@ -30,7 +30,7 @@ function loadfasta(ref::AbstractString)
 	# a = collect(open(FASTAReader{DNASequence},ref))
 	# Seq[(seqname(s),convert(String,sequence(s))) for s in a]
 	open(FASTA.Reader,ref) do io
-		Seq[(seqname(record),string(sequence(record))) for record in io]
+		Seq[(FASTA.identifier(record),string(FASTA.sequence(record))) for record in io]
 	end
 end
 
