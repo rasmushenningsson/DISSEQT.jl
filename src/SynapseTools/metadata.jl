@@ -191,7 +191,7 @@ end
 
 
 function downloadbymeta!(syn, metadata::DataFrame, IDColumn::Symbol, pathColumn::Symbol; cacheDir="")
-    @assert haskey(metadata,IDColumn)
+    @assert hasproperty(metadata,IDColumn)
     
     kwargs = isempty(cacheDir) ? () :    
 

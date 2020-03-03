@@ -8,13 +8,13 @@ end
 
 
 function featurepositions(featureTable::DataFrame, featureName)
-    row = findfirst(isequal(featureName), featureTable[:Feature])
+    row = findfirst(isequal(featureName), featureTable[!,:Feature])
     @assert row!=0
     _featurepositions(featureTable[row,:Start], featureTable[row,:End])
 end
 
 function featuresegment(featureTable::DataFrame, featureName)
-    row = findfirst(isequal(featureName), featureTable[:Feature])
+    row = findfirst(isequal(featureName), featureTable[!,:Feature])
     @assert row!=0
     featureTable[row,:Segment]
 end
@@ -24,14 +24,14 @@ end
 
 # returns the most specific (i.e. shortest) feature covering the given position
 function featureat(featureTable::DataFrame, position::Integer)
-    ind = findall(featureTable[:Start].<=position.<=featureTable[:End]) # matching features
+    ind = findall(featureTable[!,:Start].<=position.<=featureTable[!,:End]) # matching features
     isempty(ind) && return ""
     i = argmin( featureTable[ind,:End] - featureTable[ind,:Start] )
     featureTable[ind[i],:Feature] # name of shortest feature
 end
 
 function codonposition(featureTable::DataFrame, featureName, position::Integer)
-    i = findfirst(isequal(featureName), featureTable[:Feature])
+    i = findfirst(isequal(featureName), featureTable[!,:Feature])
     @assert i>0 "Feature $featureName not found in table"
     @assert featureTable[i,:Start]<=position<=featureTable[i,:End]
     p = position-featureTable[i,:Start]
