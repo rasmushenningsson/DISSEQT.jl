@@ -10,7 +10,7 @@ using Cairo
 using Fontconfig
 
 import PlotlyJS; const py=PlotlyJS # import to avoid clash with Gadfly
-using ORCA
+#using ORCA # Causes lot's of fontconfig warnings on some systems. If user wants to export PlotlyJS figures, then "import ORCA" can be run in the user script insted.
 
 
 export 
