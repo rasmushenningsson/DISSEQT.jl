@@ -410,7 +410,7 @@ function showall(io::IO, A::AnnotatedArray)
 	else
 		trailingSz = sz[3:end]
 		#nonSingletonDims = map( x->[size(annotation(A,x),(1:length(sz))...)...].>1, sAnnot )
-		nonSingletonDims = Array{BitArray{1},1}(length(sAnnot))
+		nonSingletonDims = Vector{BitVector}(undef,length(sAnnot))
 		map!( x->[size(annotation(A,x),(1:length(sz))...)...].>1, nonSingletonDims, sAnnot )
 
 		# show those that are singleton in all dimensions
