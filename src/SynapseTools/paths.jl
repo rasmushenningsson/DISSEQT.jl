@@ -65,7 +65,7 @@ getchildbyname(syn, parent, args::AbstractString...) = getchildbyname(syn,getchi
 # parentPath - a local path or a synapseID
 # childName  - the name of a subfolder 
 function childpath(syn, parentPath::AbstractString, childName::AbstractString)
-	if SynapseClient.utils.is_synapse_id(parentPath) != nothing
+	if syn != nothing && SynapseClient.utils.is_synapse_id(parentPath) != nothing
 		getchildbyname(syn, parentPath, childName)
 	else
 		joinpath(parentPath, childName)
@@ -150,7 +150,7 @@ synapse_listfiles(syn::Synapse, parent::AbstractEntity) = synapse_listfiles(syn,
 # path - a local path or a synapseID
 # returns paths, names (where paths are local paths or Synapse IDs)
 function listfiles(syn, path::AbstractString)
-    if SynapseClient.utils.is_synapse_id(path) != nothing
+    if syn != nothing && SynapseClient.utils.is_synapse_id(path) != nothing
         synapse_listfiles(syn, path)
     else
         names = readdir(path)
@@ -166,7 +166,7 @@ end
 
 # Get local path. Downloads file from Synapse if necessary.
 function localpath(syn, path::AbstractString; kwargs...)
-    if SynapseClient.utils.is_synapse_id(path) != nothing
+    if syn != nothing && SynapseClient.utils.is_synapse_id(path) != nothing
         file = get(syn, path; kwargs...) # downloadLocation=cacheDir, ifcollision="overwrite.local"
         file.path
     else

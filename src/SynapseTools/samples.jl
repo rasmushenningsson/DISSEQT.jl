@@ -4,7 +4,7 @@
 # runName - name of the run. Only used if path is a SynapseID, where it assumes runName is a subfolder. Otherwise path is used directly.
 # returns paths, names (where paths are local paths or Synapse IDs)
 function listaligned(syn, path::AbstractString, runName::AbstractString)
-    if SynapseClient.utils.is_synapse_id(path) != nothing
+    if syn != nothing && SynapseClient.utils.is_synapse_id(path) != nothing
         folder = getchildbyname(syn, path, runName)
         isempty(folder) && error("Could not find \"$runName\" in \"$path\".")
     else
